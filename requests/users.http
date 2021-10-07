@@ -1,0 +1,18 @@
+GET http://localhost:8080/users/get/all
+
+################################
+POST http://localhost:8080/users/register
+content-type: application/json
+
+{
+    "email": "taipv@gmail.com",
+    "password" :"123"
+}
+#########################
+POST http://localhost:8080/users/login 
+Content-Type: application/json
+
+{
+    "email": "taipv@gmail.com",
+    "password" :"123"
+}
