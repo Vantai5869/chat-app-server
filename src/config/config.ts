@@ -3,18 +3,19 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const MONGO_OPTIONS = {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    socketTimeoutMS: 30000,
+    // useUnifiedTopology: true,
+    // useNewUrlParser: true,
+
     keepAlive: true,
-    poolSize: 50,
-    autoIndex: false,
-    retryWrites: true
+    autoIndex: false, // Don't build indexes
+    maxPoolSize: 10, // Maintain up to 10 socket connections
+    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
 
-const MONGO_USERNAME = process.env.MONGO_USERNAME || 'superuser';
-const MONGO_PASSWORD = process.env.MONGO_USERNAME || 'supersecretpassword1';
-const MONGO_HOST = process.env.MONGO_URL || `cluster0.menvh.mongodb.net/sample?w=majority`;
+const MONGO_USERNAME = process.env.MONGO_USERNAME || 'taipv';
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD || 'mgtaipv00';
+const MONGO_HOST = process.env.MONGO_URL || `hero.538dt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const MONGO = {
     host: MONGO_HOST,

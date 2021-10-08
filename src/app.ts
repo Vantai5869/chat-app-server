@@ -34,9 +34,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Parse the body of the request
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded(({extended: true})));
 
 app.get("/healthcheck", (req, res) => res.sendStatus(200));
 
