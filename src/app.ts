@@ -38,6 +38,8 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded());
 
+app.get("/healthcheck", (req, res) => res.sendStatus(200));
+
 // user router
 app.use('/users', userRoutes);
 

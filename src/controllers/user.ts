@@ -16,7 +16,6 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const register = (req: Request, res: Response, next: NextFunction) => {
-    logging.debug(NAMESPACE, 'req',req)
     let { email, password } = req.body;
 
     bcryptjs.hash(password, 10, (hashError, hash) => {
@@ -49,12 +48,11 @@ const register = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-const login = (req: Request, res: Response, next: NextFunction) => {
+const login =async (req: Request, res: Response, next: NextFunction) => {
     let { email, password } = req.body;
-
-    User.find({ email })
-        .exec()
-        .then((users) => {
+    try {
+        const users= await User.find({ email })
+        if(users){
             if (users.length !== 1) {
                 return res.status(401).json({
                     message: 'Unauthorized'
@@ -83,31 +81,33 @@ const login = (req: Request, res: Response, next: NextFunction) => {
                     });
                 }
             });
-        })
-        .catch((err) => {
-            console.log(err);
+        }
+    } catch (err) {
+        console.log(err);
             res.status(500).json({
                 error: err
             });
-        });
+    }
 };
 
-const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
-    User.find()
-        .select('-password')
-        .exec()
-        .then((users) => {
+const getAllUsers = async(req: Request, res: Response, next: NextFunction) => {
+    logging.info(NAMESPACE, 'This is getALLUsers.');
+    try {
+        const users= await User.find().select('-password')
+        if(users){
             return res.status(200).json({
                 users: users,
                 count: users.length
             });
-        })
-        .catch((error) => {
-            return res.status(500).json({
-                message: error.message,
-                error
-            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            error
         });
+    }
+    
+     
 };
 
 export default { validateToken, register, login, getAllUsers };

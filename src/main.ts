@@ -6,7 +6,7 @@ require('dotenv').config()
 const server = http.createServer(app)
 const PORT = process.env.PORT || '8080'
 server.on('connection',()=>{
-    console.log('ss')
+    console.log('connection port: '+PORT)
 })
 
 server.listen(PORT,()=>console.info(`listening port ${PORT}: http://localhost:${PORT}`))
