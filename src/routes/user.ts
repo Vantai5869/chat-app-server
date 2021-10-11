@@ -4,9 +4,13 @@ import extractJWT from '../middleware/extractJWT';
 
 const router = express.Router();
 
-router.get('/validate', extractJWT, controller.validateToken);
-router.post('/register', controller.register);
+router.get('/auth/validate', extractJWT, controller.validateToken);
+router.get('/', controller.getAllUsers);
+router.post('/', controller.register);
+router.get('/:id', ()=>{});
+router.put('/:id', ()=>{});
+router.delete('/:id', ()=>{});
+router.delete('/', controller.deleteAll);
 router.post('/login', controller.login);
-router.get('/get/all', controller.getAllUsers);
 
 export = router;

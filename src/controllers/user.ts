@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import bcryptjs from 'bcryptjs';
 import logging from '../config/logging';
-import User from '../models/user';
+import {UserModel} from '../models/User';
 import signJWT from '../functions/signJTW';
 
 const NAMESPACE = 'User';
@@ -16,8 +16,8 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const register = (req: Request, res: Response, next: NextFunction) => {
+    logging.debug(NAMESPACE,'debug',req)
     let { email, password } = req.body;
-
     bcryptjs.hash(password, 10, (hashError, hash) => {
         if (hashError) {
             return res.status(401).json({
@@ -26,7 +26,7 @@ const register = (req: Request, res: Response, next: NextFunction) => {
             });
         }
 
-        const _user = new User({
+        const _user = new UserModel({
             _id: new mongoose.Types.ObjectId(),
             email,
             password: hash
@@ -51,7 +51,7 @@ const register = (req: Request, res: Response, next: NextFunction) => {
 const login =async (req: Request, res: Response, next: NextFunction) => {
     let { email, password } = req.body;
     try {
-        const users= await User.find({ email })
+        const users= await UserModel.find({ email })
         if(users){
             if (users.length !== 1) {
                 return res.status(401).json({
@@ -91,9 +91,8 @@ const login =async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAllUsers = async(req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, 'This is getALLUsers.');
     try {
-        const users= await User.find().select('-password')
+        const users= await UserModel.find().select('-password')
         if(users){
             return res.status(200).json({
                 users: users,
@@ -111,4 +110,22 @@ const getAllUsers = async(req: Request, res: Response, next: NextFunction) => {
      
 };
 
-export default { validateToken, register, login, getAllUsers };
+const deleteAll = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        const usersDie= await UserModel.deleteMany({})
+        if(usersDie)
+        return res.status(200).json({
+            message: `Deleted ${usersDie.deletedCount} !`,
+        });
+      
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            error
+        });
+    }
+    
+     
+};
+
+export default { validateToken, register, login, getAllUsers, deleteAll };

@@ -1,11 +1,11 @@
-GET http://localhost:8080/users/get/all
+GET http://localhost:8080/users
 
 ################################
-POST http://localhost:8080/users/register
+POST http://localhost:8080/users
 content-type: application/json
 
 {
-    "email": "taipv@gmail.com",
+    "email": "taipv2s2@gmail.com",
     "password" :"123"
 }
 #########################
@@ -16,3 +16,6 @@ Content-Type: application/json
     "email": "taipv@gmail.com",
     "password" :"123"
 }
+#########################
+DELETE http://localhost:8080/users
+

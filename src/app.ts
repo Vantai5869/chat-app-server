@@ -1,12 +1,13 @@
 import express from 'express';
+import cors from 'cors'
 import logging from './config/logging';
 import userRoutes from './routes/user';
-import cors from 'cors'
 
 const NAMESPACE = 'APP';
 
 const app = express();
 app.use(cors());
+
 
 // Log the request 
 app.use((req, res, next) => {
@@ -30,17 +31,26 @@ app.use((req, res, next) => {
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).json({});
     }
-
     next();
 });
 
-app.use(express.json());
-app.use(express.urlencoded(({extended: true})));
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+// Khai báo static file
+app.use('/public',express.static('public'))
 
 app.get("/healthcheck", (req, res) => res.sendStatus(200));
 
+
 // user router
-app.use('/users', userRoutes);
+app.use('/api/v1/users', userRoutes);
+
+
+// swagger
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('./../swagger.json')
+app.use('/v1/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // err handle
 app.use((req, res, next) => {
@@ -50,7 +60,6 @@ app.use((req, res, next) => {
         message: error.message
     });
 });
-
 
 
 
