@@ -1,5 +1,5 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
-import { Role } from '../models/User';
+import { Role } from '../models/user';
 
 export class RegisterInput {
     @prop({ required: false })
@@ -20,7 +20,7 @@ export class RegisterInput {
     @prop({ required: true })
     public avatar!: string;
 
-    @prop({ enum: Role, required: true, default: [Role.Guest]})
+    @prop({ enum: Role, required: true, default: [Role.USER]})
     public role!: Role;
 
 }
