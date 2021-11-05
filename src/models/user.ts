@@ -1,5 +1,5 @@
 import { prop, getModelForClass, modelOptions, index } from '@typegoose/typegoose';
-import config from './../config/config';
+import config from '../config/config';
 
 export enum Genders {
     MALE = 'male',
@@ -26,7 +26,7 @@ class IUser {
     public lastName?: string;
 
     @prop()
-    public username!: string;
+    public username: string;
 
     @prop({ required: true, unique: true,match: /^(([^<>()\[\]\\.,:\s@"]+(\.[^<>()\[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })
     public email!: string;  
@@ -66,6 +66,12 @@ class IUser {
 
     @prop({ type: String, required: true, default:Language.VI })
     public languages?: string;
+
+    @prop({ required: true ,  default: false })
+    public verify:   Boolean;
+
+    @prop({ required: true ,  default: true })
+    public available:   Boolean;
 }
   
 const UserModel = getModelForClass(IUser);

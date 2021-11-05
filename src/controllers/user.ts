@@ -16,7 +16,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const register = (req: Request, res: Response, next: NextFunction) => {
-    let { email, password } = req.body;
+    let { email, password,...rest } = req.body;
     bcryptjs.hash(password, 10, (hashError, hash) => {
         if (hashError) {
             return res.status(401).json({
@@ -28,6 +28,7 @@ const register = (req: Request, res: Response, next: NextFunction) => {
         const _user = new UserModel({
             _id: new mongoose.Types.ObjectId(),
             email,
+            ...rest,
             password: hash
         });
 
@@ -123,8 +124,59 @@ const deleteAll = async(req: Request, res: Response, next: NextFunction) => {
             error
         });
     }
-    
-     
+
+};
+const getUser = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user= await UserModel.findById(req.params.id)
+        if(user)
+        return res.status(200).json(user);
+      
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            error
+        });
+    }
+
+};
+const updateUser = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user= await UserModel.findByIdAndUpdate({_id: req.params.id},req.body)
+        if(user){
+            return res.status(200).json({
+                message: `Updated ${user.email} !`,
+            });
+
+        }
+        return res.status(200).json({
+            message: `Cannot find!`,
+        });
+      
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            error
+        });
+    }
+
+};
+const deleteUser = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userDie= await UserModel.findByIdAndDelete(req.params.id)
+        if(userDie)
+        return res.status(200).json({
+            message: `Deleted ${userDie.email} !`,
+        });
+      
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            error
+        });
+    }
+
 };
 
-export default { validateToken, register, login, getAllUsers, deleteAll };
+
+export default { validateToken, register, login, getAllUsers, deleteAll,getUser, updateUser, deleteUser };

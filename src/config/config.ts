@@ -7,8 +7,8 @@ const MONGO_OPTIONS = {
     // useNewUrlParser: true,
 
     keepAlive: true,
-    autoIndex: false, // Don't build indexes
-    maxPoolSize: 10, // Maintain up to 10 socket connections
+    autoIndex: true, // Don't build indexes
+    maxPoolSize: 500, // Maintain up to 500 socket connections
     serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
     socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
@@ -30,7 +30,7 @@ const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
 const SERVER_PORT = process.env.SERVER_PORT || 1337;
 const SERVER_TOKEN_EXPIRETIME = process.env.SERVER_TOKEN_EXPIRETIME || 3600;
 const SERVER_TOKEN_ISSUER = process.env.SERVER_TOKEN_ISSUER || 'coolIssuer';
-const SERVER_TOKEN_SECRET = process.env.SERVER_TOKEN_SECRET || 'superencryptedsecret';
+const SERVER_TOKEN_SECRET = process.env.SERVER_TOKEN_SECRET || 'tpv';
 
 const SERVER = {
     hostname: SERVER_HOSTNAME,
