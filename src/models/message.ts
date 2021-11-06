@@ -4,6 +4,7 @@ export enum MessageType {
     MESSAGE="message",
     IMAGE = 'image',
     VIDEO = 'video',
+    AUDIO = 'audio',
     PDF = 'pdf',
     WORD = 'word',
     ZIP = 'zip',
