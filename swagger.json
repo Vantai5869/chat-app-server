@@ -11,19 +11,49 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080/api/v1"
+      "url": "https://chat-app-server-hero.herokuapp.com/api/v1"
     },
     {
-      "url": "https://localhost:8080/api/v1"
+      "url": "https://chat-app-server-hero.herokuapp.com/api/v1"
     }
   ],
   "tags": [
     {
-      "name": "Users",
-      "description": "API for users in the system"
+      "name": "Users"
+    },
+    {
+      "name": "Rooms"
     }
+    ,
+    {
+      "name": "Participants"
+    },
+    {
+      "name": "Messages"
+    }
+
   ],
   "paths": {
+    "/users/{page}/{limit}":{
+     "get":{
+      "tags": [
+        "Users"
+      ],
+      "summary": "Get user by page",
+      "parameters":[
+        {
+          "name": "page",
+          "in" :"path"
+        },
+        {
+          "name": "limit",
+          "in" :"path"
+
+        }
+      ],
+      "responses":{}
+     }
+    },
     "/users": {
       "get": {
         "tags": [
@@ -61,18 +91,7 @@
           "required": false
         },
         "responses": {
-          "201": {
-            "description": "New user is created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "user"
+        }
       },
       "delete": {
         "tags": [
@@ -80,17 +99,12 @@
         ],
         "summary": "Delete all users in system",
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Users"
-                }
-              }
-            }
+        },
+        "security": [
+          {
+            "bearerAuth": []
           }
-        }
+        ]
       }
     },
     "/users/{id}": {
@@ -111,16 +125,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "get user successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
         }
       },
       "put": {
@@ -151,16 +155,6 @@
           "required": false
         },
         "responses": {
-          "200": {
-            "description": "User is updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
         },
         "x-codegen-request-body-name": "user"
       },
@@ -212,19 +206,7 @@
           },
           "required": false
         },
-        "responses": {
-          "200": {
-            "description": "Login successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "user"
+        "responses": {}
       }
     },
     "/users/auth/validate": {
@@ -250,7 +232,262 @@
           }
         ]
       }
+    },
+
+
+    "/rooms/{page}/{limit}":{
+      "get":{
+        "tags":["Rooms"],
+        "summary": "get room by page",
+        "parameters": [
+          {
+            "name":"page",
+            "in":"path"
+          },
+          {
+            "name":"limit",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      }
+    },
+
+    "/rooms":{
+      "post":{
+        "tags":["Rooms"],
+        "summary": "create a room",
+        "requestBody":{
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Room"
+              }
+            }
+          }
+        },
+        "responses":{}
+      }
+    },
+
+
+    "/rooms/{id}":{
+      "get":{
+        "tags":["Rooms"],
+        "summary": "get info a room",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      },
+      "delete":{
+        "tags":["Rooms"],
+        "summary": "delete a room",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      },
+      "put":{
+        "tags":["Rooms"],
+        "summary": "update a room",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "requestBody": {
+          "description": "Room with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Room"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {}
+      }
+    },
+
+
+    "/participants/{page}/{limit}":{
+      "get":{
+        "tags":["Participants"],
+        "summary": "get messages by page",
+        "parameters": [
+          {
+            "name":"page",
+            "in":"path"
+          },
+          {
+            "name":"limit",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      }
+    },
+
+    "/participants":{
+      "post":{
+        "tags":["Participants"],
+        "summary": "create a participant",
+        "requestBody":{
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Participant"
+              }
+            }
+          }
+        },
+        "responses":{}
+      }
+    },
+
+
+    "/participants/{id}":{
+      "get":{
+        "tags":["Participants"],
+        "summary": "get info a participant",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      },
+      "delete":{
+        "tags":["Participants"],
+        "summary": "delete a participant",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      },
+      "put":{
+        "tags":["Participants"],
+        "summary": "update a participant",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "requestBody": {
+          "description": "Participant with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Participant"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {}
+      }
+    },
+
+
+
+    "/messages/{page}/{limit}":{
+      "get":{
+        "tags":["Messages"],
+        "summary": "get messages by page",
+        "parameters": [
+          {
+            "name":"page",
+            "in":"path"
+          },
+          {
+            "name":"limit",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      }
+    },
+
+    "/messages":{
+      "post":{
+        "tags":["Messages"],
+        "summary": "create a messages",
+        "requestBody":{
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          }
+        },
+        "responses":{}
+      }
+    },
+
+
+    "/messages/{id}":{
+      "get":{
+        "tags":["Messages"],
+        "summary": "get info a message",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      },
+      "delete":{
+        "tags":["Messages"],
+        "summary": "delete a message",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      },
+      "put":{
+        "tags":["Messages"],
+        "summary": "update a message",
+        "parameters":[
+          {
+            "name":"id",
+            "in":"path"
+          }
+        ],
+        "requestBody": {
+          "description": "Message with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {}
+      }
     }
+
+
   },
   "components": {
     "schemas": {
@@ -264,7 +501,7 @@
           "email": {
             "type": "string",
             "format": "email",
-            "example":"user@example.com"
+            "example":"user@gmail.com"
           },
           "password": {
             "type": "string"
@@ -381,8 +618,80 @@
         "items": {
           "$ref": "#/components/schemas/User"
         }
+      },
+
+      "Room": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example":"Room's Tai"
+          },
+          "isPrivate":{
+            "type": "boolean"
+          },
+          "createBy": {
+            "type": "string"
+          },
+          "admins": {
+            "type": "array",
+            "example":["fyt87u92i02i0202"]
+          }
+        }
+      },
+
+      "Participant": {
+        "required": [
+          "userId",
+          "roomId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "roomId": {
+            "type": "string"
+          }
+        }
+      },
+
+      "Message": {
+        "required": [
+          "userId",
+          "roomId",
+          "content",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+           "roomId": {
+            "type": "string"
+          },
+           "content": {
+            "type": "string"
+          },
+           "type": {
+            "type": "string",
+            "enum":["message","image","video","pdf","word","zip","txt","call","missCall"]
+          },
+          "readBy": {
+            "type": "array"
+          }
+        }
       }
+
     },
+
+     
+
+
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",

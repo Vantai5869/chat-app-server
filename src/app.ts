@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors'
 import logging from './config/logging';
 import userRoutes from './routes/user';
+import roomRoutes from './routes/room';
+import participantRoutes from './routes/participant';
+import messageRoutes from './routes/message';
 
 const NAMESPACE = 'APP';
 
@@ -43,8 +46,11 @@ app.use('/public',express.static('public'))
 app.get("/healthcheck", (req, res) => res.sendStatus(200));
 
 
-// user router
+// router
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/rooms', roomRoutes);
+app.use('/api/v1/participants', participantRoutes);
+app.use('/api/v1/messages', messageRoutes);
 
 
 // swagger

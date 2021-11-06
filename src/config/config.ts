@@ -9,7 +9,7 @@ const MONGO_OPTIONS = {
     keepAlive: true,
     autoIndex: true, // Don't build indexes
     maxPoolSize: 500, // Maintain up to 500 socket connections
-    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+    serverSelectionTimeoutMS: 50000, // Keep trying to send operations for 50 seconds
     socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
 

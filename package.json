@@ -28,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.3",
     "mongoose": "^6.0.9",
+    "mongoose-paginate-v2": "^1.4.2",
     "swagger-ui-express": "^4.1.6",
     "ts-node": "^10.2.1",
     "tsoa": "^2.3.8",

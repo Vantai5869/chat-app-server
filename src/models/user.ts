@@ -19,6 +19,9 @@ export enum Language {
 @modelOptions({ options: { customName: 'users' } })
 @index({ email: 1 }, { unique: true })
 class IUser {
+    @prop({required: false})
+    public _id: string;
+
     @prop({ required: false })
     public firstName?: string;
 

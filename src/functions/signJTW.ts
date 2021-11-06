@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
 import logging from '../config/logging';
-import IUser from '../interfaces/user';
+import {IUser} from '../models/user';
 
 const NAMESPACE = 'Auth';
 
@@ -16,7 +16,8 @@ const signJWT = (user: IUser, callback: (error: Error | null, token: string | nu
         jwt.sign(
             {
                 email: user.email,
-                role: user.role
+                role: user.role,
+                id: user._id
             },
             config.server.token.secret,
             {
