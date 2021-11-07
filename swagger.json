@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://chat-app-server-hero.herokuapp.com/api/v1"
+      "url": "https://chat-app-server-hero.herokuapp.com/api/v1"
     },
     {
       "url": "https://chat-app-server-hero.herokuapp.com/api/v1"
@@ -509,7 +509,8 @@
               }
             }
           }
-        }
+        },
+        "responses":{}
       }
     }
 
