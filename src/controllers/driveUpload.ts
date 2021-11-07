@@ -9,6 +9,7 @@ const uploadToServer = async (req, res) => {
       const file = req.files.file;
       const firtFileName= nanoid()
     try {
+        console.log("domain debug:",config.DOMAIN)
         file.mv(`./public/file-upload/${firtFileName}_${file.name}`, err => {
             if (err) {
               console.error(err);
