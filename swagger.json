@@ -30,6 +30,9 @@
     },
     {
       "name": "Messages"
+    },
+    {
+      "name":"Media"
     }
 
   ],
@@ -484,6 +487,29 @@
           "required": false
         },
         "responses": {}
+      }
+    },
+
+    "/media/upload": {
+      "post": {
+        "tags": ["Media"],
+        "name": "Upload Media",
+        "description": "Uploads a Media file to the server.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
 
