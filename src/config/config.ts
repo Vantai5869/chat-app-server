@@ -25,7 +25,7 @@ const MONGO = {
     url: `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
 };
 
-const DOMAIN = process.env.DOMAIN || 'localhost:8080';
+const DOMAIN = process.env.DOMAIN || 'https://chat-app-server-hero.herokuapp.com';
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
 const SERVER_PORT = process.env.SERVER_PORT || 1337;
 const SERVER_TOKEN_EXPIRETIME = process.env.SERVER_TOKEN_EXPIRETIME || 3600;
