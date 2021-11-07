@@ -1,4 +1,4 @@
-
+import { nanoid } from 'nanoid'
 import config from './../config/config';
 
 const uploadToServer = async (req, res) => {
@@ -7,13 +7,14 @@ const uploadToServer = async (req, res) => {
       }
     
       const file = req.files.file;
+      const firtFileName= nanoid()
     try {
-        file.mv(`./public/file-upload/${file.name}`, err => {
+        file.mv(`./public/file-upload/${firtFileName}_${file.name}`, err => {
             if (err) {
               console.error(err);
               return res.status(500).send(err);
             }
-            res.json({ fileName: file.name, filePath:`${config.DOMAIN}/public/file-upload/${file.name}` });
+            res.json({ fileName: file.name, filePath:`${config.DOMAIN}/public/file-upload/${firtFileName}_${file.name}` });
           });
     } catch (error) {
         
