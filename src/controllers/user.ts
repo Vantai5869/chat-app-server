@@ -77,7 +77,14 @@ const login =async (req: Request, res: Response) => {
                             return res.status(200).json({
                                 success: true,
                                 message: 'Auth successful',
-                                token: token
+                                token: token,
+                                user: {
+                                    _id: users[0]._id,
+                                    email:users[0].email,
+                                    username: users[0].username,
+                                    firstName: users[0].firstName,
+                                    lastName: users[0].lastName,
+                                }
                             });
                         }
                     });
@@ -202,7 +209,7 @@ const getByPage = async(req: Request, res: Response) => {
     }
     
     try {
-        await UserModel.find()
+        await UserModel.find().select('-password')
         .skip(pageOptions?.page * pageOptions?.limit)
         .limit(pageOptions.limit)
         .exec(function (err, doc) {
