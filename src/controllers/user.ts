@@ -77,8 +77,7 @@ const login =async (req: Request, res: Response) => {
                             return res.status(200).json({
                                 success: true,
                                 message: 'Auth successful',
-                                token: token,
-                                user: users[0]
+                                token: token
                             });
                         }
                     });

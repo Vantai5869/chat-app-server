@@ -130,4 +130,36 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 };
 
 
-export default {create, getByPage,getOne, update, remove };
+
+
+const getRoomIdsByPage = async(req: Request, res: Response) => {
+    const pageOptions = {
+        page: +req.params.page || 0,
+        limit: +req.params.limit || 10
+    }
+    
+    try {
+        ParticipantModel.find({userId:req.params.userId})
+        .skip(pageOptions?.page * pageOptions?.limit)
+        .limit(pageOptions.limit)
+        .exec(function (err, doc) {
+        if(err) { res.status(500).json(err); return; };
+        return  res.status(200).json({
+                success:true,
+                message: `get success`,
+                data: doc,
+            })
+        });
+      
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message: 'create participant not successful',
+        })
+           
+    }
+
+};
+
+
+export default {create, getByPage,getOne, update, remove,getRoomIdsByPage };

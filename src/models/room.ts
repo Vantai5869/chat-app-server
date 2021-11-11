@@ -14,8 +14,8 @@ class IRoom {
     @prop({ required: true })
     public createBy: string;
 
-    @prop({ type: String })
-    public admins: string[];
+    @prop({ type: [String], ref: 'users' })
+    public admins:[string]
 
     @prop({ required: true ,  default: new Date })
     public createdAt:   Date;

@@ -129,5 +129,67 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 
 };
 
+// get danh sach cac phong kem tin nhan cuoi cung
+const getMessagesByUserId=async(req: Request, res: Response)=>{
+    const pageOptions = {
+        page: +req.params.page || 0,
+        limit: +req.params.limit || 10
+    }
+    const rooms =[]
+    const roomIds = await MessageModel.find({userId: req.params.userId},null,{sort:{_id:-1} 
+        , skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit
+    }).distinct('roomId');
+    for(let i=0; i<roomIds.length; i++){
+        const roomid=roomIds[i]
+        const room = await MessageModel.findOne({roomId:roomid, userId: req.params.userId})
+        .populate({
+            path: 'roomId',
+            select:'name',
+            populate: {
+                path: 'admins',
+                options: {
+                    limit: '2',
+                    select: 'avatar'
+                }
+            },
+          
+        }).populate('readBy', 'email avatar')
+        rooms.push(room)
+    }
+    
+    res.json(rooms)
+   
+}
 
-export default {create, getByPage,getOne, update, remove };
+// lay tat cac cac tin nhan trong phong
+const getMessagesByRoomId=async(req: Request, res: Response)=>{
+    const pageOptions = {
+        page: +req.params.page || 0,
+        limit: +req.params.limit || 10
+    }
+    
+    try {
+        const messages =await MessageModel.find({roomId: req.params.roomId},null,
+        {sort:{_id:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
+        .populate('readBy', 'email avatar')
+        
+        if(messages){
+            return  res.status(200).json({
+                success:true,
+                message: `get success`,
+                data: messages
+            })
+        }
+        return res.status(500).json({err:"error"});
+     
+      
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message: 'create message not successful',
+        })
+           
+    }
+}
+
+export default {create, getByPage,getOne, update, remove,getMessagesByUserId,getMessagesByRoomId };

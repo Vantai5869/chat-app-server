@@ -1,4 +1,5 @@
-import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
+import { prop, getModelForClass, modelOptions, Ref } from '@typegoose/typegoose';
+import { Schema } from 'mongoose';
 
 export enum MessageType {
     MESSAGE="message",
@@ -18,11 +19,11 @@ class IMessage {
     @prop()
     public _id: string;
     
-    @prop({ required: true })
+    @prop({ ref: 'users' })
     public userId: string;
 
-    @prop({ required: true })
-    public roomId: string;
+    @prop( { ref: 'rooms' })
+    public roomId: string
 
     @prop({ required: true })
     public content: string;
@@ -30,8 +31,8 @@ class IMessage {
     @prop({ required: true, default:MessageType.MESSAGE})
     public type: MessageType;
 
-    @prop({ type: String, required: true, default:MessageType.MESSAGE})
-    public readBy: [string];
+    @prop({ type: [String], ref: 'users' })
+    public readBy:[string]
 
     @prop({ required: true ,  default: new Date })
     public createdAt:   Date;

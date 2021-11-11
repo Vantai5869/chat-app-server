@@ -402,6 +402,49 @@
       }
     },
 
+    "/messages/users/{userId}/{page}/{limit}":{
+      "get":{
+        "tags":["Messages"],
+        "summary": "get last messages of all room by userId ",
+        "parameters": [
+          {
+            "name":"UserId",
+            "in":"path"
+          },
+          {
+            "name":"page",
+            "in":"path"
+          },
+          {
+            "name":"limit",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      }
+    },
+
+    "/messages/rooms/{roomId}/{page}/{limit}":{
+      "get":{
+        "tags":["Messages"],
+        "summary": "get conversation of one room",
+        "parameters": [
+          {
+            "name":"roomId",
+            "in":"path"
+          },
+          {
+            "name":"page",
+            "in":"path"
+          },
+          {
+            "name":"limit",
+            "in":"path"
+          }
+        ],
+        "responses":{}
+      }
+    },
 
 
     "/messages/{page}/{limit}":{
