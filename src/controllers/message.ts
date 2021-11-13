@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { MessageModel } from '../models/message';
 import mongoose  from 'mongoose';
+import { MessageModel } from '../models/message';
+import participantController from './participant';
 
 const create = async (req: Request, res: Response, next: NextFunction)=> {
     const _message = new MessageModel({
@@ -131,29 +132,19 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 
 // get danh sach cac phong kem tin nhan cuoi cung
 const getMessagesByUserId=async(req: Request, res: Response)=>{
-    const pageOptions = {
-        page: +req.params.page || 0,
-        limit: +req.params.limit || 10
-    }
     const rooms =[]
-    console.log(req.body.roomIds)
     const roomIds =req.body.roomIds
     for(let i=0; i<roomIds.length; i++){
         const roomid=roomIds[i]
-        const room = await MessageModel.findOne({roomId:roomid})
+        let room = await MessageModel.findOne({roomId:roomid})
         .populate({
             path: 'roomId',
             select:'name',
-            populate: {
-                path: 'admins',
-                options: {
-                    limit: '2',
-                    select: 'avatar'
-                }
-            },
-          
-        }).populate('readBy', 'email avatar')
-        rooms.push(room)
+        }).populate('readBy', 'email avatar').lean()
+        const avatars = await participantController.getAvatarForRoom(roomid)
+        let r: any=room
+        r={...room, avatar:avatars}
+        rooms.push(r)
     }
     
     res.json(rooms)

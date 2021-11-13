@@ -155,5 +155,16 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
 
 };
 
-
-export default {create, getByPage,getOne, update, remove,getRoomIdsByPage };
+const getAvatarForRoom=async(roomId:string)=>{
+        const avatars = await ParticipantModel.find({roomId:roomId},null,{limit:2})
+        .populate('userId', 'avatar')
+        let avatarArr=[]
+        for(let i = 0; i < avatars.length; i++) {
+            let a: any
+            a= avatars[i].userId
+            avatarArr.push(a.avatar)
+        }
+        return avatarArr
+   
+}
+export default {create, getByPage,getOne, update, remove,getRoomIdsByPage,getAvatarForRoom };

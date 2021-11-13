@@ -5,10 +5,10 @@ class IParticipant {
     @prop()
     public _id: string;
 
-    @prop({ required: true })
+    @prop({ ref: 'users' })
     public userId: string;
 
-    @prop({ required: true })
+    @prop({ ref: 'rooms' })
     public roomId: string;
 
     @prop({ required: true ,  default: new Date })
