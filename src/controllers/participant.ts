@@ -155,9 +155,13 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
 
 };
 
-const getAvatarForRoom=async(roomId:string)=>{
-        const avatars = await ParticipantModel.find({roomId:roomId},null,{limit:2})
-        .populate('userId', 'avatar')
+const getAvatarForRoom=async(roomId:string, userId:string)=>{
+        const avatars = await ParticipantModel.find({roomId:roomId},null,{limit:2,where: {userId:{ $ne: userId }}})
+        .populate(
+            {
+                path: 'userId',
+                select: 'avatar',
+            })
         let avatarArr=[]
         for(let i = 0; i < avatars.length; i++) {
             let a: any

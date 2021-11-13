@@ -141,7 +141,7 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
             path: 'roomId',
             select:'name',
         }).populate('readBy', 'email avatar').lean()
-        const avatars = await participantController.getAvatarForRoom(roomid)
+        const avatars = await participantController.getAvatarForRoom(roomid, req.params.userId)
         let r: any=room
         r={...room, avatar:avatars}
         rooms.push(r)
