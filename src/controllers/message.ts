@@ -136,12 +136,11 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
         limit: +req.params.limit || 10
     }
     const rooms =[]
-    const roomIds = await MessageModel.find({userId: req.params.userId},null,{sort:{_id:-1} 
-        , skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit
-    }).distinct('roomId');
+    console.log(req.body.roomIds)
+    const roomIds =req.body.roomIds
     for(let i=0; i<roomIds.length; i++){
         const roomid=roomIds[i]
-        const room = await MessageModel.findOne({roomId:roomid, userId: req.params.userId})
+        const room = await MessageModel.findOne({roomId:roomid})
         .populate({
             path: 'roomId',
             select:'name',

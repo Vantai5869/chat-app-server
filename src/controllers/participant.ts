@@ -132,24 +132,18 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 
 
 
-const getRoomIdsByPage = async(req: Request, res: Response) => {
+const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) => {
     const pageOptions = {
         page: +req.params.page || 0,
         limit: +req.params.limit || 10
     }
     
     try {
-        ParticipantModel.find({userId:req.params.userId})
-        .skip(pageOptions?.page * pageOptions?.limit)
-        .limit(pageOptions.limit)
-        .exec(function (err, doc) {
-        if(err) { res.status(500).json(err); return; };
-        return  res.status(200).json({
-                success:true,
-                message: `get success`,
-                data: doc,
-            })
-        });
+        const roomIds = await ParticipantModel.find({userId: req.params.userId},null,{sort:{_id:-1} 
+            , skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit
+        }).distinct('roomId');
+        req.body.roomIds = roomIds
+        next()
       
     } catch (error) {
         return res.status(500).json({
