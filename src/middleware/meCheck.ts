@@ -15,7 +15,7 @@ const meCheck = (req: Request, res: Response, next: NextFunction) => {
         jwt.verify(token, config.server.token.secret, (error, decoded) => {
             logging.debug(NAMESPACE,'token:',  decoded);
             if (error) {
-                return res.status(404).json({
+                return res.status(401).json({
                     message: error,
                     error
                 });
