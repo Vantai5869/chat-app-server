@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://chat-app-server-hero.herokuapp.com/api/v1"
+      "url": "http://localhost:8080/api/v1"
     }
   ],
   "tags": [
@@ -48,7 +48,10 @@
         {
           "name": "limit",
           "in" :"path"
-
+        },
+        {
+          "name":"search",
+          "in":"query"
         }
       ],
       "responses":{}
@@ -569,6 +572,10 @@
             "type": "string",
             "format": "email",
             "example":"user@gmail.com"
+          },
+          "phone":{
+            "type": "string",
+            "example":"0388685867"
           },
           "password": {
             "type": "string"

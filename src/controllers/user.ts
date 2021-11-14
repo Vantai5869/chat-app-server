@@ -203,28 +203,53 @@ const deleteUser = async(req: Request, res: Response) => {
 };
 
 const getByPage = async(req: Request, res: Response) => {
+    console.log(req.query)
+    let searchOption={}
+    if(req.query.search && req.query.search!=''){
+        let y:any=req.query.search
+        let x=y.slice(0,1)[0]
+        if(x==0||x==8){
+            searchOption ={ 
+                phone: { $regex: req.query.search, $options:"i"}
+            }
+        }
+        else{
+            searchOption ={ 
+                email: { $regex: req.query.search, $options: "i" },
+            }
+        }
+    }
+    
+     
     const pageOptions = {
         page: +req.params.page || 0,
         limit: +req.params.limit || 10
     }
     
     try {
-        await UserModel.find().select('-password')
-        .skip(pageOptions?.page * pageOptions?.limit)
-        .limit(pageOptions.limit)
-        .exec(function (err, doc) {
-        if(err) { res.status(500).json(err); return; };
+        const users= await UserModel.find(
+            searchOption,
+            null,
+            {
+                sort:{_id:-1},
+                kip:pageOptions?.page * pageOptions?.limit,
+                limit:pageOptions?.limit, 
+                where: {}
+            }).select('-password')
+        if(!users){
+            return res.status(500);
+        }
         return  res.status(200).json({
                 success:true,
                 message: `get success`,
-                data: doc,
+                data: users,
             })
-        });
       
     } catch (error) {
         return res.status(500).json({
             success:false,
-            message: 'create room not successful',
+            message: 'get user not successful',
+            error:error
         })
            
     }
