@@ -11,11 +11,11 @@ class IParticipant {
     @prop({ ref: 'rooms' })
     public roomId: string;
 
-    @prop({ required: true ,  default: Date.now() })
-    public createdAt:   Date;
+    @prop({ required: true ,  default: Date.now })
+    public createdAt:   Number;
 
-    @prop({ required: true ,  default: Date.now() })
-    public updatedAt: Date;
+    @prop({ required: true ,  default:  Date.now,  })
+    public updatedAt: Number;
 }
   
 const ParticipantModel = getModelForClass(IParticipant);

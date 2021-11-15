@@ -35,11 +35,11 @@ class IMessage {
     @prop({ type: [String], ref: 'users' })
     public readBy:[string]
 
-    @prop({ required: true ,  default: Date.now() })
-    public createdAt:   Date;
+    @prop({ required: true ,  default: Date.now })
+    public createdAt:   Number;
 
-    @prop({ required: true ,  default:  Date.now() })
-    public updatedAt: Date;
+    @prop({ required: true ,  default:  Date.now,  })
+    public updatedAt: Number;
 
 }
   

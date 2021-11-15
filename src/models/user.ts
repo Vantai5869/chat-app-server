@@ -55,14 +55,14 @@ class IUser {
     @prop({ required: true ,  default: false })
     public isBlock:   Boolean;
 
-    @prop({ required: true ,  default: Date.now() })
-    public lastLogin:   Date;
+    @prop({ required: true ,  default: Date.now })
+    public lastLogin:   Number;
 
-    @prop({ required: true ,  default: Date.now() })
-    public createdAt:   Date;
+    @prop({ required: true ,  default: Date.now })
+    public createdAt:   Number;
 
-    @prop({ required: true ,  default: Date.now() })
-    public updatedAt: Date;
+    @prop({ required: true ,  default:  Date.now,  })
+    public updatedAt: Number;
 
     @prop({ enum: Genders, default:Genders.UNKNOW })
     public gender: Genders;

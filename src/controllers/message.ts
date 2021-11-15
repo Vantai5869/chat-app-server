@@ -4,6 +4,7 @@ import { MessageModel } from '../models/message';
 import participantController from './participant';
 
 const create = async (req: Request, res: Response, next: NextFunction)=> {
+    participantController.updateOder(req.body.roomId)
     let id = new mongoose.Types.ObjectId();
     if(req?.body?._id){
         id= req.body._id
@@ -164,7 +165,7 @@ const getMessagesByRoomId=async(req: Request, res: Response)=>{
     
     try {
         const messages =await MessageModel.find({roomId: req.params.roomId},null,
-        {sort:{createdAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
+        {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
         .populate('readBy', 'email avatar')
         
         if(messages){

@@ -142,9 +142,7 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
         console.log('hi')
         const roomIds = await ParticipantModel.find({userId: req.params.userId},null,
         {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
-        .distinct('roomId');
-        req.body.roomIds = roomIds
-        console.log(roomIds)
+        req.body.roomIds =roomIds.map(item=>item.roomId)
         next()
       
     } catch (error) {
@@ -176,4 +174,16 @@ const getAvatarForRoom=async(roomId:string, userId:string)=>{
         return [avatarArr,name]
    
 }
-export default {create, getByPage,getOne, update, remove,getRoomIdsByPage,getAvatarForRoom };
+
+// sap xep lai cho phong co tin nhan moi noi len tren
+const updateOder= async(roomId) =>{
+    let update:any= Date.now().toString()
+    try {
+       const x= await ParticipantModel.updateMany({roomId: roomId},{updatedAt:update},{new: true})
+       console.log('update')
+       console.log(x)
+    } catch (error) {
+      console.error(error)
+    }
+}
+export default {create, getByPage,getOne, update, remove,getRoomIdsByPage,getAvatarForRoom, updateOder };
