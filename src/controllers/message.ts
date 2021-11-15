@@ -164,7 +164,7 @@ const getMessagesByRoomId=async(req: Request, res: Response)=>{
     
     try {
         const messages =await MessageModel.find({roomId: req.params.roomId},null,
-        {sort:{_id:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
+        {sort:{createdAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
         .populate('readBy', 'email avatar')
         
         if(messages){

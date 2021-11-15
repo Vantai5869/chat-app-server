@@ -17,10 +17,10 @@ class IRoom {
     @prop({ type: [String], ref: 'users' })
     public admins:[string]
 
-    @prop({ required: true ,  default: new Date })
+    @prop({ required: true ,  default: Date.now() })
     public createdAt:   Date;
 
-    @prop({ required: true ,  default: new Date })
+    @prop({ required: true ,  default: Date.now()})
     public updatedAt: Date;
 
 }

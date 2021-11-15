@@ -11,10 +11,10 @@ class IParticipant {
     @prop({ ref: 'rooms' })
     public roomId: string;
 
-    @prop({ required: true ,  default: new Date })
+    @prop({ required: true ,  default: Date.now() })
     public createdAt:   Date;
 
-    @prop({ required: true ,  default: new Date })
+    @prop({ required: true ,  default: Date.now() })
     public updatedAt: Date;
 }
   

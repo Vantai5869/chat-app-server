@@ -139,10 +139,12 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
     }
     
     try {
-        const roomIds = await ParticipantModel.find({userId: req.params.userId},null,{sort:{updatedAt:-1} 
-            , skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit
-        }).distinct('roomId');
+        console.log('hi')
+        const roomIds = await ParticipantModel.find({userId: req.params.userId},null,
+        {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
+        .distinct('roomId');
         req.body.roomIds = roomIds
+        console.log(roomIds)
         next()
       
     } catch (error) {
