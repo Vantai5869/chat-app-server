@@ -140,7 +140,7 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
     const roomIds =req.body.roomIds
     for(let i=0; i<roomIds.length; i++){
         const roomid=roomIds[i]
-        let room = await MessageModel.findOne({roomId:roomid})
+        let room = await MessageModel.findOne({roomId:roomid},null,{sort:{createdAt:-1}})
         .populate({
             path: 'roomId',
             select:'name',
