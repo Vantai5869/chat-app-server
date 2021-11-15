@@ -160,15 +160,18 @@ const getAvatarForRoom=async(roomId:string, userId:string)=>{
         .populate(
             {
                 path: 'userId',
-                select: 'avatar',
+                select: 'avatar username',
+                
             })
         let avatarArr=[]
+        let name=''
         for(let i = 0; i < avatars.length; i++) {
             let a: any
             a= avatars[i].userId
+            name+=a.username
             avatarArr.push(a.avatar)
         }
-        return avatarArr
+        return [avatarArr,name]
    
 }
 export default {create, getByPage,getOne, update, remove,getRoomIdsByPage,getAvatarForRoom };

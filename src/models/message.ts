@@ -12,6 +12,7 @@ export enum MessageType {
     TXT = 'txt',
     CALL = 'call',
     MISSCALL = 'missCall',
+    INFO='info'
 }
 
 @modelOptions({ options: { customName: 'messages' } })

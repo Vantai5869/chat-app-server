@@ -148,7 +148,7 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
         if(room){
             const avatars = await participantController.getAvatarForRoom(roomid, req.params.userId)
             let r: any=room
-            r={...room, avatar:avatars}
+            r={...room, avatar:avatars[0], name:avatars[1]}
             rooms.push(r)
         }
     }
