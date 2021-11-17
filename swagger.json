@@ -605,18 +605,7 @@
           "isBlock": {
             "type":"boolean"
           },
-          "lastLogin": {
-            "type": "string", 
-            "format": "date-time"
-          },
-          "createdAt": {
-            "type": "string", 
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string", 
-            "format": "date-time"
-          },
+        
           "gender": {
             "type":"string",
             "enum":["unknow","male","female"]

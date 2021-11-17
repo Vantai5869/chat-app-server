@@ -156,7 +156,7 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
     res.json(rooms)
 }
 
-// lay tat cac cac tin nhan trong phong
+// lay cac tin nhan trong phong theo trang
 const getMessagesByRoomId=async(req: Request, res: Response)=>{
     const pageOptions = {
         page: +req.params.page || 0,
@@ -166,7 +166,7 @@ const getMessagesByRoomId=async(req: Request, res: Response)=>{
     try {
         const messages =await MessageModel.find({roomId: req.params.roomId},null,
         {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
-        .populate('readBy', 'email avatar')
+        .populate('readBy', 'email avatar').populate('userId', 'avatar')
         
         if(messages){
             return  res.status(200).json({
