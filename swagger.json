@@ -742,7 +742,7 @@
           },
            "type": {
             "type": "string",
-            "enum":["message","image","video","pdf","word","zip","txt","call","missCall"]
+            "enum":["message","image","video","pdf","word","zip","txt","call","missCall","info"]
           },
           "readBy": {
             "type": "array"
