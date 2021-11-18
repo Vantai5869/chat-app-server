@@ -5,7 +5,7 @@ class IRoom {
     @prop()
     public _id:string
 
-    @prop({ required: true })
+    @prop()
     public name: string;
 
     @prop({ required: true })

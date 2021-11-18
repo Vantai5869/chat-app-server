@@ -203,7 +203,6 @@ const deleteUser = async(req: Request, res: Response) => {
 };
 
 const getByPage = async(req: Request, res: Response) => {
-    console.log(req.query)
     let searchOption={}
     if(req.query.search && req.query.search!=''){
         let y:any=req.query.search
@@ -215,7 +214,7 @@ const getByPage = async(req: Request, res: Response) => {
         }
         else{
             searchOption ={ 
-                email: { $regex: req.query.search, $options: "i" },
+                username: { $regex: req.query.search, $options: "i" },
             }
         }
     }
@@ -233,8 +232,7 @@ const getByPage = async(req: Request, res: Response) => {
             {
                 sort:{_id:-1},
                 skip:pageOptions?.page * pageOptions?.limit,
-                limit:pageOptions?.limit, 
-                where: {}
+                limit:pageOptions?.limit
             }).select('-password')
         if(!users){
             return res.status(500);

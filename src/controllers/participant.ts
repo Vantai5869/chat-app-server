@@ -155,24 +155,23 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
 
 };
 
-const getAvatarForRoom=async(roomId:string, userId:string)=>{
-        const avatars = await ParticipantModel.find({roomId:roomId},null,{sort:{updatedAt:-1},limit:2,where: {userId:{ $ne: userId }}})
+const getInfoForRoom=async(roomId:string, userId:string)=>{
+        const participants = await ParticipantModel.find({roomId:roomId},null,{sort:{updatedAt:-1},limit:2,where: {userId:{ $ne: userId }}})
         .populate(
             {
                 path: 'userId',
                 select: 'avatar username',
                 
             })
-        let avatarArr=[]
+        let avatar=[]
         let name=''
-        for(let i = 0; i < avatars.length; i++) {
+        for(let i = 0; i < participants.length; i++) {
             let a: any
-            a= avatars[i].userId
+            a= participants[i].userId
             name+=a.username
-            avatarArr.push(a.avatar)
+            avatar.push(a.avatar)
         }
-        return [avatarArr,name]
-   
+        return {avatar,name}
 }
 
 // sap xep lai cho phong co tin nhan moi noi len tren
@@ -186,4 +185,33 @@ const updateOder= async(roomId) =>{
       console.error(error)
     }
 }
-export default {create, getByPage,getOne, update, remove,getRoomIdsByPage,getAvatarForRoom, updateOder };
+
+
+const getInfoUserOfRoom=async(roomId:string, userId:string)=>{
+    const participants = await ParticipantModel.find({roomId:roomId},null,{sort:{updatedAt:-1},limit:2,where: {userId:{ $ne: userId }}})
+    .populate(
+        {
+            path: 'userId',
+            select: 'avatar username phone',
+        })
+    if(participants.length==1){
+        let a: any
+        a= participants[0].userId
+        const {_id,avatar,phone, username:name}= a
+        return {_id, avatar, phone, name}
+    }
+    else return null
+}
+
+
+export default {
+    create, 
+    getByPage,
+    getOne, 
+    update, 
+    remove,
+    getRoomIdsByPage,
+    getInfoForRoom,
+    updateOder,
+    getInfoUserOfRoom
+     };

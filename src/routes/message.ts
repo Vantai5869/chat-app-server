@@ -6,6 +6,9 @@ import extractJWT from '../middleware/extractJWT';
 
 const router = express.Router();
 
+// get friend recently
+router.get('/recent/users/:userId/:page/:limit',participantController.getRoomIdsByPage, messageController.getRecentUsers);
+
 // get messages of room
 router.get('/rooms/:roomId/:page/:limit', messageController.getMessagesByRoomId);
 

@@ -137,23 +137,36 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 
 // get danh sach cac phong kem tin nhan cuoi cung
 const getMessagesByUserId=async(req: Request, res: Response)=>{
-    const rooms =[]
+    const promiseArr=[]
     const roomIds =req.body.roomIds
     for(let i=0; i<roomIds.length; i++){
-        const roomid=roomIds[i]
-        let room = await MessageModel.findOne({roomId:roomid},null,{sort:{createdAt:-1}})
-        .populate({
-            path: 'roomId',
-            select:'name',
-        }).populate('readBy', 'email avatar').lean()
-        if(room){
-            const avatars = await participantController.getAvatarForRoom(roomid, req.params.userId)
-            let r: any=room
-            r={...room, avatar:avatars[0], name:avatars[1]}
-            rooms.push(r)
-        }
+        const promise=  new Promise((resolve, reject)=>{
+            const roomid=roomIds[i]
+            let room =  MessageModel.findOne({roomId:roomid},null,{sort:{createdAt:-1}})
+            .populate('roomId', 'name')
+            .populate('readBy', 'email avatar')
+            .populate('userId', 'username')
+            .lean()
+            
+            const participants =  participantController.getInfoForRoom(roomid, req.params.userId)
+            Promise.all([room, participants]).then(([a1,a2] )=> {
+                let result:any = {...a1,...a2}
+                const {roomId:{_id} , userId:sender ,content, type, avatar, name, updatedAt} = result
+                result={_id,sender,content, type, avatar, name, updatedAt}
+                resolve(result)
+            })
+        })
+        promiseArr.push(promise)
+       
     }
-    res.json(rooms)
+    Promise.all(promiseArr).then(result => {
+        result.sort((a,b) => {
+            return roomIds.indexOf(a._id)-roomIds.indexOf(b._id)
+        })
+        return res.status(200).json(result)
+    }).catch(err =>{
+        return res.status(500)
+    })
 }
 
 // lay cac tin nhan trong phong theo trang
@@ -166,7 +179,7 @@ const getMessagesByRoomId=async(req: Request, res: Response)=>{
     try {
         const messages =await MessageModel.find({roomId: req.params.roomId},null,
         {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
-        .populate('readBy', 'username avatar').populate('userId', 'avatar username')
+        .populate('readBy', 'username avatar').populate('userId', 'avatar username').lean()
         
         if(messages){
             return  res.status(200).json({
@@ -187,4 +200,72 @@ const getMessagesByRoomId=async(req: Request, res: Response)=>{
     }
 }
 
-export default {create, getByPage,getOne, update, remove,getMessagesByUserId,getMessagesByRoomId };
+const getRecentUsers=async(req: Request, res: Response)=>{
+    let searchOption=''
+    if(req.query.search && req.query.search!=''){
+        let y:any=req.query.search
+        let x=y.slice(0,1)[0]
+        if(x==0||x==8){
+            searchOption ='phone'
+        }
+        else{
+            searchOption ='username'
+        }
+    }
+    
+    const rooms=[]
+    const roomIds =req.body.roomIds
+    const promiseArr=[]
+    for(let i=0; i<roomIds.length; i++){
+        const promise=  new Promise((resolve, reject)=>{
+            const roomid=roomIds[i]
+            let room =  MessageModel.findOne({roomId:roomid},null,{sort:{createdAt:-1}}).select('userId')
+            .populate({
+                path: 'roomId',
+                select:'name',
+            }).lean()
+            const user =  participantController.getInfoUserOfRoom(roomid, req.params.userId)
+            Promise.all([room, user]).then(([a1,a2] )=> {
+                let result:any = {...a1,...a2}
+                const {_id, roomId:{_id:roomId}, avatar, phone, name} =result
+                result ={_id,roomId,avatar,phone,name}
+                if(a2!=null){
+                    rooms.push(result)
+                }
+                resolve(rooms)
+            })
+
+        })
+        promiseArr.push(promise)
+    }
+    Promise.all(promiseArr).then(() => {
+        let usersFilter:any = rooms
+        if(searchOption!=''){
+            if(searchOption=='username'){
+                usersFilter = usersFilter.filter((user:any)=>user.name.toLowerCase().indexOf(req.query.search) >= 0)
+            }
+            else{
+                usersFilter = usersFilter.filter((user:any)=>user.phone.toLowerCase().indexOf(req.query.search) >= 0)
+            }
+        }
+        usersFilter.sort((a,b) => {
+            return roomIds.indexOf(a.roomId)-roomIds.indexOf(b.roomId)
+        })
+
+        return res.status(200).json(usersFilter)
+    }).catch(err =>{
+        return res.status(500)
+    })
+    
+}
+
+export default {
+    create,
+    getByPage,
+    getOne,
+    update,
+    remove,
+    getMessagesByUserId,
+    getMessagesByRoomId,
+    getRecentUsers
+ };
