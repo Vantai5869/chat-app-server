@@ -241,11 +241,12 @@ const getRecentUsers=async(req: Request, res: Response)=>{
     Promise.all(promiseArr).then(() => {
         let usersFilter:any = rooms
         if(searchOption!=''){
+            const keySearch:any= req.query.search
             if(searchOption=='username'){
-                usersFilter = usersFilter.filter((user:any)=>user.name.toLowerCase().indexOf(req.query.search) >= 0)
+                usersFilter = usersFilter.filter((user:any)=>user.name.toLowerCase().indexOf(keySearch.toLowerCase()) >= 0)
             }
             else{
-                usersFilter = usersFilter.filter((user:any)=>user.phone.toLowerCase().indexOf(req.query.search) >= 0)
+                usersFilter = usersFilter.filter((user:any)=>user.phone.toLowerCase().indexOf(keySearch.toLowerCase()) >= 0)
             }
         }
         usersFilter.sort((a,b) => {
