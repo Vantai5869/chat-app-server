@@ -232,7 +232,7 @@ const getByPage = async(req: Request, res: Response) => {
             null,
             {
                 sort:{_id:-1},
-                kip:pageOptions?.page * pageOptions?.limit,
+                skip:pageOptions?.page * pageOptions?.limit,
                 limit:pageOptions?.limit, 
                 where: {}
             }).select('-password')
