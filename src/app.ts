@@ -15,6 +15,9 @@ app.use(fileUpload());
 
 // Log the request 
 app.use((req, res, next) => {
+    if(req.url=='/socket.io/?EIO=4&transport=polling&t=Nqt6X25'){
+        return
+    }
     //Log the req
     logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
 

@@ -23,7 +23,7 @@ class IMessage {
     @prop({ ref: 'users' })
     public userId: string;
 
-    @prop( { ref: 'rooms' })
+    @prop( { ref: 'rooms', required: true } )
     public roomId: string
 
     @prop({ required: true })
