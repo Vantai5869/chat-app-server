@@ -15,7 +15,7 @@ app.use(fileUpload());
 
 // Log the request 
 app.use((req, res, next) => {
-    if(req.url=='/socket.io/?EIO=4&transport=polling&t=Nqt6X25'){
+    if(req.url.indexOf('socket')){
         return
     }
     //Log the req
