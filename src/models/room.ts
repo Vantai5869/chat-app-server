@@ -8,6 +8,9 @@ class IRoom {
     @prop()
     public name: string;
 
+    @prop()
+    public avatar: string;
+
     @prop({ required: true })
     public isPrivate: Boolean;
 
