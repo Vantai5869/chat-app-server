@@ -139,7 +139,6 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
     }
     
     try {
-        console.log('hi')
         const roomIds = await ParticipantModel.find({userId: req.params.userId},null,
         {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
         req.body.roomIds =roomIds.map(item=>item.roomId)
@@ -168,7 +167,7 @@ const getInfoForRoom=async(roomId:string, userId:string)=>{
         for(let i = 0; i < participants.length; i++) {
             let a: any
             a= participants[i].userId
-            name+=a.username
+            name+=a?.username
             avatar.push(a.avatar)
         }
         return {avatar,name}
@@ -179,8 +178,6 @@ const updateOder= async(roomId) =>{
     let update:any= Date.now().toString()
     try {
        const x= await ParticipantModel.updateMany({roomId: roomId},{updatedAt:update},{new: true})
-       console.log('update')
-       console.log(x)
     } catch (error) {
       console.error(error)
     }

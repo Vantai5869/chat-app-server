@@ -26,6 +26,7 @@ const create = async (req: Request, res: Response, next: NextFunction)=> {
         })
      
     } catch (error) {
+        console.error(error)
         return res.status(500).json({
             success:false,
             message: error.message,

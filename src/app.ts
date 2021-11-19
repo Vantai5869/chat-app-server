@@ -15,9 +15,6 @@ app.use(fileUpload());
 
 // Log the request 
 app.use((req, res, next) => {
-    if(req.url.indexOf('socket')){
-        return
-    }
     //Log the req
     logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
 
