@@ -3,8 +3,12 @@ import { RoomModel } from '../models/room';
 import mongoose  from 'mongoose';
 
 const create = async (req: Request, res: Response, next: NextFunction)=> {
+    let id = new mongoose.Types.ObjectId();
+    if(req?.body?._id){
+        id= req.body._id
+    }
     const _room = new RoomModel({
-        _id: new mongoose.Types.ObjectId(),
+        _id: id,
         ...req.body
     });
     try {
