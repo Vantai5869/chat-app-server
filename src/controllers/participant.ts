@@ -167,7 +167,7 @@ const getInfoForRoom=async(roomId:string, userId:string)=>{
         for(let i = 0; i < participants.length; i++) {
             let a: any
             a= participants[i].userId
-            name+=a?.username
+            name+=a?.username+', '
             avatar.push(a.avatar)
         }
         return {avatar,name}
@@ -200,6 +200,18 @@ const getInfoUserOfRoom=async(roomId:string, userId:string)=>{
     else return null
 }
 
+const getParticipantIds=async(roomId:string)=>{
+    try {
+        const participants = await ParticipantModel.find({roomId:roomId}).distinct('userId')
+        console.log(participants)
+        return participants
+    } catch (error) {
+        console.log(error);
+        return 
+    }
+    
+}
+
 
 export default {
     create, 
@@ -210,5 +222,6 @@ export default {
     getRoomIdsByPage,
     getInfoForRoom,
     updateOder,
-    getInfoUserOfRoom
-     };
+    getInfoUserOfRoom,
+    getParticipantIds
+};

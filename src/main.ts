@@ -3,10 +3,14 @@ import http from 'http'
 import mongoose from "mongoose";
 import logging from './config/logging';
 import config from './config/config';
+import participantController from './controllers/participant';
 require('dotenv').config()
 
 const NAMESPACE = 'Server';
 const server = http.createServer(app)
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 const PORT = process.env.PORT || '8080'
 server.on('connection',()=>{
     console.log('connection '+PORT)
@@ -28,4 +32,55 @@ server.on('listening', async () => {
 	mongoose.connection.on('error', (err: any) => {
 		console.error(err);
 	});
+});
+
+
+let users = [];
+
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+    console.log(users);
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+  console.log(users);
+};
+
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
+};
+
+const emitToMany =(arrId,data)=> {
+  for(let i = 0; i < arrId.length; i++){
+    io.to(arrId[i]).emit("getMessage",data);
+  }
+  return
+};
+
+io.on("connection", (socket) => {
+  //when ceonnect
+  console.log("=>=======>a user connected.");
+
+  //take userId and socketId from user
+  socket.on("addUser", (userId) => {
+    console.log("=> đã join"+userId)
+    addUser(userId, socket.id);
+    socket.join(userId);
+    // io.emit("getUsers", users);
+  });
+
+  //send and get message
+  socket.on("sendMessage",async (data) => {
+    const participants =await participantController.getParticipantIds(data.roomId);
+    emitToMany(participants,data)
+  });
+
+  //when disconnect
+  socket.on("disconnect", () => {
+    console.log("a user disconnected!");
+    removeUser(socket.id);
+    io.emit("getUsers", users);
+  });
 });
