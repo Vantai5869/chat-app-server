@@ -141,6 +141,7 @@ const getRoomIdsByPage = async(req: Request, res: Response, next: NextFunction) 
     try {
         const roomIds = await ParticipantModel.find({userId: req.params.userId},null,
         {sort:{updatedAt:-1}, skip:pageOptions?.page * pageOptions?.limit, limit:pageOptions?.limit})
+        if(roomIds.length==0) return res.status(200).json([])
         req.body.roomIds =roomIds.map(item=>item.roomId)
         next()
       
@@ -168,7 +169,7 @@ const getInfoForRoom=async(roomId:string, userId:string)=>{
             let a: any
             a= participants[i].userId
             name+=a?.username+', '
-            avatar.push(a.avatar)
+            avatar.push(a?.avatar)
         }
         return {avatar,name}
 }
@@ -212,6 +213,46 @@ const getParticipantIds=async(roomId:string)=>{
     
 }
 
+const createMultiple=async(req: Request, res: Response, next: NextFunction)=>{
+    if(req.body?.isHaveRoom==true){
+        console.log(req.body.isHaveRoom)
+        next()
+        return
+    }
+    let roomId= req.body.roomId
+    let arr=[]
+    if(req.body?.userIds){
+        const userIds= req.body.userIds
+        console.log(userIds)
+        for(let i = 0; i <userIds.length; i++){
+            arr.push({
+                userId:userIds[i],
+                roomId:roomId
+            })
+        }
+        try {
+            const participant = await ParticipantModel.insertMany(arr)
+            if(participant){
+                next()
+                return
+            }
+            return res.status(404).json({
+                success:false,
+                message: 'create participant not successful',
+            })
+         
+        } catch (error) {
+            return res.status(500).json({
+                success:false,
+                message: error.message,
+            })
+        }
+    }
+    else{
+        next()
+    }
+}
+
 
 export default {
     create, 
@@ -223,5 +264,6 @@ export default {
     getInfoForRoom,
     updateOder,
     getInfoUserOfRoom,
-    getParticipantIds
+    getParticipantIds,
+    createMultiple
 };

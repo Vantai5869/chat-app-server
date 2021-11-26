@@ -134,5 +134,47 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 
 };
 
+const checkExist = async(req: Request, res: Response, next: NextFunction) => {
+    // xem có roomId truyền lên hay khong
+    if(req.body?.roomId) {
+        const checkRoom = await RoomModel.findOne({_id: req.body.roomId});
+        if(checkRoom?._id) {
+            console.log(checkRoom)
+            req.body.isHaveRoom = true;
+            next()
+            return 
+        }
+        const roomId = req.body.roomId
+        console.log(roomId)
+        const IdArr = req.body.userIds
+        const _room = new RoomModel({
+            _id: roomId.toString(),
+            createBy: req.body.userId._id,
+            admins:IdArr?.length==2? IdArr:req.body.userId._id ,
+            avatar: req.body?.roomAvatar,
+            name : req.body?.roomName
+        });
+        try {
+            const res = await _room.save()
+            console.log(res)
+        } catch (error) {
+            console.log(error)
+            res.status(500)
+        }
+        next()
+    }
+    else{
+        res.status(500)
+    }
 
-export default {create, getByPage,getOne, update, remove };
+};
+
+
+export default {
+    create,
+    getByPage,
+    getOne, 
+    update, 
+    remove,
+    checkExist
+};
