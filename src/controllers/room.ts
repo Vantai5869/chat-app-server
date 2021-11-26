@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { RoomModel } from '../models/room';
 import mongoose  from 'mongoose';
+import { ISendMessage } from '../types/ISendMessage';
 
 const create = async (req: Request, res: Response, next: NextFunction)=> {
     let id = new mongoose.Types.ObjectId();
@@ -134,6 +135,7 @@ const remove = async(req: Request, res: Response, next: NextFunction) => {
 
 };
 
+
 const checkExist = async(req: Request, res: Response, next: NextFunction) => {
     // xem có roomId truyền lên hay khong
     if(req.body?.roomId) {
@@ -169,6 +171,34 @@ const checkExist = async(req: Request, res: Response, next: NextFunction) => {
 
 };
 
+export const  checkRoom = async(data: ISendMessage) => {
+    // xem có roomId truyền lên hay khong
+    if(data?.roomId) {
+        const checkRoom = await RoomModel.findOne({_id: data.roomId});
+        if(checkRoom?._id) {
+            return true
+        }
+        const roomId = data.roomId
+        const IdArr = data.userIds
+        const _room = new RoomModel({
+            _id: roomId.toString(),
+            createBy: data.userId._id,
+            admins:IdArr?.length==2? IdArr:data.userId._id ,
+            avatar: data?.roomAvatar,
+            name : data?.roomName
+        });
+        try {
+            await _room.save()
+            return false
+        } catch (error) {
+            return "err"
+        }
+    }
+    else{
+        return "err"
+    }
+
+};
 
 export default {
     create,

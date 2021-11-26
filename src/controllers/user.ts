@@ -82,8 +82,6 @@ const login =async (req: Request, res: Response) => {
                                     _id: users[0]._id,
                                     email:users[0].email,
                                     username: users[0].username,
-                                    firstName: users[0].firstName,
-                                    lastName: users[0].lastName,
                                 }
                             });
                         }
@@ -167,6 +165,7 @@ const updateUser = async(req: Request, res: Response) => {
             return res.status(200).json({
                 success: true,
                 message: `Updated ${user.email} !`,
+                data:user
             });
 
         }

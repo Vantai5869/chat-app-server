@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import mongoose  from 'mongoose';
 import { MessageModel } from '../models/message';
+import { ISendMessage } from '../types/ISendMessage';
 import participantController from './participant';
 
 const create = async (req: Request, res: Response, next: NextFunction)=> {
@@ -259,6 +260,29 @@ const getRecentUsers=async(req: Request, res: Response)=>{
     })
     
 }
+
+
+
+
+export const createMessage = async (data:ISendMessage)=> {
+    participantController.updateOder(data.roomId)
+    let id: any= new mongoose.Types.ObjectId();
+    if(data?._id){
+        id= data._id
+    }
+    const _message = new MessageModel({
+        _id:id,
+        userId: data.userId._id ,
+        ...data
+    });
+    try {
+         await  _message.save()
+        return true
+    } catch (error) {
+      return false
+    }
+    
+};
 
 export default {
     create,

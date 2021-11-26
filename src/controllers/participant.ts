@@ -254,6 +254,31 @@ const createMultiple=async(req: Request, res: Response, next: NextFunction)=>{
 }
 
 
+
+export const createMultipleParticipants=async(data)=>{
+   
+    let roomId= data.roomId
+    let arr=[]
+    if(data?.userIds){
+        const userIds= data.userIds
+        for(let i = 0; i <userIds.length; i++){
+            arr.push({
+                userId:userIds[i],
+                roomId:roomId
+            })
+        }
+        try {
+            const participant = await ParticipantModel.insertMany(arr)
+            return true
+        } catch (error) {
+           return false
+        }
+    }
+    else{
+        return false
+    }
+}
+
 export default {
     create, 
     getByPage,

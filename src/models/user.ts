@@ -22,12 +22,6 @@ class IUser {
     @prop()
     public _id:string
 
-    @prop({ required: false })
-    public firstName?: string;
-
-    @prop({ required: false })
-    public lastName?: string;
-
     @prop()
     public username: string;
 

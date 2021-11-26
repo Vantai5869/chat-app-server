@@ -3,7 +3,10 @@ import http from 'http'
 import mongoose from "mongoose";
 import logging from './config/logging';
 import config from './config/config';
-import participantController from './controllers/participant';
+import participantController, { createMultipleParticipants } from './controllers/participant';
+import { ISendMessage } from './types/ISendMessage';
+import { checkRoom } from './controllers/room';
+import { createMessage } from './controllers/message';
 require('dotenv').config()
 
 const NAMESPACE = 'Server';
@@ -72,9 +75,31 @@ io.on("connection", (socket) => {
   });
 
   //send and get message
-  socket.on("sendMessage",async (data) => {
+  socket.on("sendMessage",async (data: ISendMessage) => {
+
+    /**
+     * b1 kiem tra  roomId co trong db chua
+     * b2 neu co thi nghia la can kiem tra xem nhung user trong userIds co phong hay chua 
+     * b3 chưa co phong thi tao phong=>them vao phong. neu co roi thi sang tao tin nhan
+     */
+    const isExist = await checkRoom(data)
+    if(isExist=='err'){
+      socket.emit("resSendMessage",{success:false})
+    }else if(isExist){
+
+      // tao mess
+      const message =createMessage(data)
+      if(message) socket.emit("resSendMessage",{success:false})
+    }else{
+      // add nguoi dung vao nhom
+      createMultipleParticipants(data)
+
+      // tao mess
+      const message =createMessage(data)
+      if(message) socket.emit("resSendMessage",{success:false})
+    }
     const participants =await participantController.getParticipantIds(data.roomId);
-    emitToMany(participants,data)
+    emitToMany(participants.length>0?participants.length:data?.userIds ,data)
   });
 
   //when disconnect
