@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
       if(message) socket.emit("resSendMessage",{success:false})
     }
     const participants =await participantController.getParticipantIds(data.roomId);
-    emitToMany(participants.length>0?participants.length:data?.userIds ,data)
+    emitToMany(participants.length>0?participants:data?.userIds ,data)
   });
 
   //when disconnect

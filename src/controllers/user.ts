@@ -82,6 +82,7 @@ const login =async (req: Request, res: Response) => {
                                     _id: users[0]._id,
                                     email:users[0].email,
                                     username: users[0].username,
+                                    avatar: users[0].avatar,
                                 }
                             });
                         }
