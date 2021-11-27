@@ -72,6 +72,9 @@ class IUser {
 
     @prop({ required: true ,  default: true })
     public available:   Boolean;
+
+    @prop({ default:  Date.now,  })
+    public dataOfBirth: Number;
 }
   
 const UserModel = getModelForClass(IUser);
