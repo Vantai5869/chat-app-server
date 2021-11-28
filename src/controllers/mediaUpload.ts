@@ -1,12 +1,12 @@
 import config from './../config/config';
 const fs = require("fs");
 const cloudinary = require("cloudinary").v2;
+const path = require("path")
 
 const uploadToCloudinary=async (req, res) => {
     if (req.files === null) {
         return res.status(400).json({ msg: 'No file uploaded' });
       }
-      console.log(req.files)
       let fileType =req.files.file.mimetype
       let fileExt=''
       switch (fileType) {
@@ -46,11 +46,10 @@ const uploadToCloudinary=async (req, res) => {
           default: fileType= 'raw'
       }
       const file = req.files.file;
-      const path =`${config.DOMAIN}/public/file-upload/${file.name}${fileExt}`
+      const filepath =path.join(__dirname,`../../public/file-upload/${file.name}${fileExt}`)
 
     try {
-        console.log("domain debug:",config.DOMAIN)
-        const fileMvRespon= file.mv(path, err => {
+        const fileMvRespon= file.mv(filepath, err => {
             if (err) {
               console.error(err);
               return res.status(500).send(err);
@@ -63,7 +62,7 @@ const uploadToCloudinary=async (req, res) => {
             });
 
             cloudinary.uploader.upload(
-                path, {
+                filepath, {
                     resource_type: fileType,
                     public_id: `VideoUploads/${file.name}`,
                     // chunk_size: 6000000,
@@ -94,7 +93,7 @@ const uploadToCloudinary=async (req, res) => {
                     }
                     console.log("err2", err)
                     if (err) return res.send(err);
-                    fs.unlinkSync(path);
+                    fs.unlinkSync(filepath);
                     console.log("video", video)
                     return res.json({
                         success: true,
