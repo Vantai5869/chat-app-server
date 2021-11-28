@@ -45,6 +45,13 @@ const uploadToCloudinary=async (req, res) => {
           }
           default: fileType= 'raw'
       }
+
+      try {
+        fs.mkdirSync(path.join(__dirname, '../../public/file-upload/'))
+      } catch (err) {
+        if (err.code !== 'EEXIST') throw err
+      }
+      
       const file = req.files.file;
       const filepath =path.join(__dirname,`../../public/file-upload/${file.name}${fileExt}`)
 
