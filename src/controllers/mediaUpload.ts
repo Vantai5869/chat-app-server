@@ -46,7 +46,7 @@ const uploadToCloudinary=async (req, res) => {
           default: fileType= 'raw'
       }
       const file = req.files.file;
-      const path =`${config.DOMAIN}./public/file-upload/${file.name}${fileExt}`
+      const path =`${config.DOMAIN}/public/file-upload/${file.name}${fileExt}`
 
     try {
         console.log("domain debug:",config.DOMAIN)
