@@ -42,10 +42,17 @@ const SERVER = {
     }
 };
 
+const CLOUDINARY = {
+    CLOUDINARY_NAME:'dueyjeqd5',
+    CLOUDINARY_KEY:'561595587471163',
+    CLOUDINARY_SECRET:'78Uz9arowByOL-xM6lx57ng1oPI'
+};
+
 const config = {
     mongo: MONGO,
     server: SERVER,
-    DOMAIN:DOMAIN
+    DOMAIN:DOMAIN,
+    CLOUDINARY:CLOUDINARY,
 };
 
 export default config;

@@ -1,9 +1,9 @@
 import express from 'express';
-import driveUploadController from '../controllers/driveUpload';
+import mediaUpload from '../controllers/mediaUpload';
 import adminCheck from '../middleware/adminCheck';
 import extractJWT from '../middleware/extractJWT';
 
 const router = express.Router();
 
-router.post('/upload', driveUploadController.uploadToServer);
+router.post('/upload', mediaUpload.uploadToCloudinary);
 export = router;

@@ -5,13 +5,15 @@ import userRoutes from './routes/user';
 import roomRoutes from './routes/room';
 import participantRoutes from './routes/participant';
 import messageRoutes from './routes/message';
-import driveUploadRoutes from './routes/driveUploadRoutes';
+import mediaUpload from './routes/mediaUpload';
 const fileUpload = require('express-fileupload');
 const NAMESPACE = 'APP';
 
 const app = express();
 app.use(cors());
-app.use(fileUpload());
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  }));
 
 // Log the request 
 app.use((req, res, next) => {
@@ -52,7 +54,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/rooms', roomRoutes);
 app.use('/api/v1/participants', participantRoutes);
 app.use('/api/v1/messages', messageRoutes);
-app.use('/api/v1/media', driveUploadRoutes);
+app.use('/api/v1/media', mediaUpload);
 
 
 // swagger

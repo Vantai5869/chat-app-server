@@ -537,7 +537,7 @@
       "post": {
         "tags": ["Media"],
         "name": "Upload Media",
-        "description": "Uploads a Media file to the server.",
+        "description": "Uploads a Media file to Cloudinary.",
         "requestBody": {
           "content": {
             "multipart/form-data": {

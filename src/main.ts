@@ -89,7 +89,7 @@ io.on("connection", (socket) => {
 
       // tao mess
       const message =createMessage(data)
-      if(message) socket.emit("resSendMessage",{success:false})
+      if(!message) socket.emit("resSendMessage",{success:false})
     }else{
       // add nguoi dung vao nhom
       createMultipleParticipants(data)
