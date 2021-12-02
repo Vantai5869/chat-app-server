@@ -279,6 +279,22 @@ export const createMultipleParticipants=async(data)=>{
     }
 }
 
+
+const ParticipantsOfRoom= async(req: Request, res: Response)=>{
+    try {
+        const participants = await ParticipantModel.find({roomId:req.params.roomId}).distinct('userId')
+        if(!participants) { res.status(500).json({success:false}); return; };
+        return  res.status(200).json({
+                success:true,
+                message: `get success`,
+                data: participants,
+            })
+    } catch (error) {
+        res.status(500).json({success:false, error}); return;
+    }
+    
+}
+
 export default {
     create, 
     getByPage,
@@ -290,5 +306,6 @@ export default {
     updateOder,
     getInfoUserOfRoom,
     getParticipantIds,
-    createMultiple
+    createMultiple,
+    ParticipantsOfRoom
 };
