@@ -282,12 +282,19 @@ export const createMultipleParticipants=async(data)=>{
 
 const ParticipantsOfRoom= async(req: Request, res: Response)=>{
     try {
-        const participants = await ParticipantModel.find({roomId:req.params.roomId}).distinct('userId')
+        const participants = await ParticipantModel.find({roomId:req.params.roomId}).select('userId, -_id')
+        .populate(
+            {
+                path: 'userId',
+                select: '-refreshToken -password',
+                
+        })
         if(!participants) { res.status(500).json({success:false}); return; };
+        const data = participants.map(item=>item.userId)
         return  res.status(200).json({
                 success:true,
                 message: `get success`,
-                data: participants,
+                data
             })
     } catch (error) {
         res.status(500).json({success:false, error}); return;
