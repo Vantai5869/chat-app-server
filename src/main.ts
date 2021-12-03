@@ -11,8 +11,12 @@ require('dotenv').config()
 
 const NAMESPACE = 'Server';
 const server = http.createServer(app)
-const { Server } = require("socket.io");
-const io = new Server(server);
+const { Server } = require("socket.io")
+const io = new Server(server, { 
+  cors: {
+    origin: '*',
+  }
+});
 
 const PORT = process.env.PORT || '8080'
 server.on('connection',()=>{
@@ -63,6 +67,7 @@ const emitToMany =(arrId,data)=> {
 };
 
 io.on("connection", (socket) => {
+  socket.emit("ping")
   //when ceonnect
   console.log("=>=======>a user connected.");
 
