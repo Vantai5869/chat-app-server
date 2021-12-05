@@ -61,6 +61,7 @@ const getUser = (userId) => {
 
 const emitToMany =(arrId,data)=> {
   for(let i = 0; i < arrId.length; i++){
+    console.log('xx')
     io.to(arrId[i]).emit("getMessage",data);
   }
   return
@@ -72,7 +73,7 @@ io.on("connection", (socket) => {
   console.log("=>=======>a user connected.");
 
   //take userId and socketId from user
-  socket.on("addUser", (userId) => {
+  socket.on("JOIN_ROOM", (userId) => {
     console.log("=> đã join"+userId)
     addUser(userId, socket.id);
     socket.join(userId);

@@ -162,14 +162,20 @@ const getInfoForRoom=async(roomId:string, userId:string)=>{
                 path: 'userId',
                 select: 'avatar username',
                 
-            })
+            }).lean()
         let avatar=[]
         let name=''
-        for(let i = 0; i < participants.length; i++) {
+        if(participants.length==1){
             let a: any
-            a= participants[i].userId
-            name+=a?.username+', '
-            avatar.push(a?.avatar)
+            a= participants[0].userId
+            name=a?.username
+            avatar=[a?.avatar]
+        }else{
+            let a:any,b: any
+            a= participants[0].userId
+            b= participants[1].userId
+            name=a?.username+', '+b.userId?.username+'..'
+            avatar=[a?.avatar, b?.avatar]
         }
         return {avatar,name}
 }

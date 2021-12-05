@@ -145,15 +145,16 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
             const roomid=roomIds[i]
             let room =  MessageModel.findOne({roomId:roomid},null,{sort:{createdAt:-1}})
             .populate('roomId', 'name')
-            .populate('readBy', 'email avatar')
+            // .populate('readBy', 'email avatar')
             .populate('userId', 'username')
             .lean()
             
             const participants =  participantController.getInfoForRoom(roomid, req.params.userId)
             Promise.all([room, participants]).then(([a1,a2] )=> {
                 let result:any = {...a1,...a2}
-                const {roomId:{_id} , userId:sender ,content, type, avatar, name, updatedAt} = result
-                result={_id,sender,content, type, avatar, name, updatedAt}
+                console.log('result',result)
+                const {roomId:{_id} , userId:sender ,content, type, avatar, name, updatedAt,readBy} = result
+                result={_id,sender,content, type, avatar, name,readBy, updatedAt}
                 resolve(result)
             })
         })
