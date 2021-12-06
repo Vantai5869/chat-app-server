@@ -145,7 +145,7 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
             const roomid=roomIds[i]
             let room =  MessageModel.findOne({roomId:roomid},null,{sort:{createdAt:-1}})
             .populate('roomId', 'name')
-            // .populate('readBy', 'email avatar')
+            .populate('readBy', 'email avatar')
             .populate('userId', 'username')
             .lean()
             
