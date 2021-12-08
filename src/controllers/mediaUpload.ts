@@ -76,8 +76,8 @@ const uploadToCloudinary=async (req, res) => {
                     timeout:120000,
                     eager: [
                         {
-                            width: 300,
-                            height: 300,
+                            width: 600,
+                            height: 600,
                             crop: "pad",
                             audio_codec: "none",
                         },
