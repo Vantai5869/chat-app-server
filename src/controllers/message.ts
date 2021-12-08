@@ -152,7 +152,6 @@ const getMessagesByUserId=async(req: Request, res: Response)=>{
             const participants =  participantController.getInfoForRoom(roomid, req.params.userId)
             Promise.all([room, participants]).then(([a1,a2] )=> {
                 let result:any = {...a1,...a2}
-                console.log('result',result)
                 const {roomId:{_id} , userId:sender ,content, type, avatar, name, updatedAt,readBy} = result
                 result={_id,sender,content, type, avatar, name,readBy, updatedAt}
                 resolve(result)

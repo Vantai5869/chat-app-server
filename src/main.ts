@@ -52,7 +52,6 @@ const addUser = (userId, socketId) => {
 
 const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId);
-  console.log(users);
 };
 
 const getUser = (userId) => {
@@ -61,7 +60,6 @@ const getUser = (userId) => {
 
 const emitToMany =(arrId,data)=> {
   for(let i = 0; i < arrId.length; i++){
-    console.log('xx')
     io.to(arrId[i]).emit("getMessage",data);
   }
   return

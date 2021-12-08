@@ -75,12 +75,12 @@ const uploadToCloudinary=async (req, res) => {
                     // chunk_size: 6000000,
                     timeout:120000,
                     eager: [
-                        // {
-                        //     width: 300,
-                        //     height: 300,
-                        //     crop: "pad",
-                        //     audio_codec: "none",
-                        // },
+                        {
+                            width: 300,
+                            height: 300,
+                            crop: "pad",
+                            audio_codec: "none",
+                        },
                         // {
                         //     width: 160,
                         //     height: 100,
@@ -105,6 +105,7 @@ const uploadToCloudinary=async (req, res) => {
                     return res.json({
                         success: true,
                         url: video.url,
+                        smallUrl: video.eager[0].url
                     });
                 }
             );
