@@ -16,7 +16,12 @@ const validateToken = (req: Request, res: Response) => {
     });
 };
 
-const register = (req: Request, res: Response) => {
+const register =async (req: Request, res: Response) => {
+    if(!req.body.email && !req.body.phone || !req.body.username|| !req.body.password)return  res.status(400).json({
+        success: false,
+        message: 'email|phone|username|password field not found'
+    });
+
     let { email, password,...rest } = req.body;
     bcryptjs.hash(password, 10, (hashError, hash) => {
         if (hashError) {
@@ -33,13 +38,24 @@ const register = (req: Request, res: Response) => {
             password: hash
         });
 
+        
         return _user
             .save()
             .then((user) => {
-                return res.status(201).json({
-                    success:true,
-                    user
-                });
+                signJWT(user, (_error, token) => {
+                    if (_error) {
+                        return res.status(500).json({
+                            message: _error.message,
+                            error: _error
+                        });
+                    } else if (token) {
+                        return res.status(201).json({
+                            success:true,
+                            user,
+                            token
+                        });
+                    } 
+                })
             })
             .catch((error) => {
                 return res.status(500).json({
@@ -51,12 +67,23 @@ const register = (req: Request, res: Response) => {
 };
 
 const login =async (req: Request, res: Response) => {
-    let { email, password } = req.body;
+    if(!req.body.email && !req.body.phone|| !req.body.password)return  res.status(400).json({
+        success: false,
+        message: 'email|phone|password field not found'
+    });
+    let { email,phone, password } = req.body;
+    console.log(req.body);
     try {
-        const users= await UserModel.find({ email })
+        let users
+        if(email) {
+            users= await UserModel.find({ email })
+        }else{
+            users= await UserModel.find({ phone })
+        }
         if(users){
             if (users.length !== 1) {
                 return res.status(401).json({
+                    success: false,
                     message: 'Unauthorized'
                 });
             }
@@ -64,12 +91,14 @@ const login =async (req: Request, res: Response) => {
             bcryptjs.compare(password, users[0].password, (error, result) => {
                 if (error) {
                     return res.status(401).json({
+                        success: false,
                         message: 'Password Mismatch'
                     });
                 } else if (result) {
                     signJWT(users[0], (_error, token) => {
                         if (_error) {
                             return res.status(500).json({
+                                success: false,
                                 message: _error.message,
                                 error: _error
                             });
@@ -86,6 +115,11 @@ const login =async (req: Request, res: Response) => {
                                 }
                             });
                         }
+                    });
+                }else{
+                    return res.status(401).json({
+                        success: false,
+                        message: 'Password Mismatch'
                     });
                 }
             });
