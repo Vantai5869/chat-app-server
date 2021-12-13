@@ -77,11 +77,14 @@ const login =async (req: Request, res: Response) => {
         let users
         if(email) {
             users= await UserModel.find({ email })
+            if (users.length !== 1) {
+                users= await UserModel.find({ phone })
+            }
         }else{
             users= await UserModel.find({ phone })
         }
         if(users){
-            if (users.length !== 1) {
+            if (users?.length !== 1) {
                 return res.status(401).json({
                     success: false,
                     message: 'Unauthorized'
