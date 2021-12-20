@@ -1,13 +1,14 @@
-import {app} from './app'
-import http from 'http'
+import http from 'http';
 import mongoose from "mongoose";
-import logging from './config/logging';
+import { app } from './app';
 import config from './config/config';
-import participantController, { createMultipleParticipants } from './controllers/participant';
-import { ISendMessage } from './types/ISendMessage';
-import { checkRoom } from './controllers/room';
+import logging from './config/logging';
 import { createMessage } from './controllers/message';
+import participantController, { createMultipleParticipants } from './controllers/participant';
+import { checkRoom } from './controllers/room';
+import { ISendMessage } from './types/ISendMessage';
 require('dotenv').config()
+var OpenTok = require('opentok');
 
 const NAMESPACE = 'Server';
 const server = http.createServer(app)
@@ -58,12 +59,27 @@ const getUser = (userId) => {
   return users.find((user) => user.userId === userId);
 };
 
-const emitToMany =(arrId,data)=> {
+const emitToMany =(emitName,arrId,data)=> {
   for(let i = 0; i < arrId.length; i++){
-    io.to(arrId[i]).emit("getMessage",data);
+    io.to(arrId[i]).emit(emitName,data);
   }
   return
 };
+
+const getOpentok=(data: ISendMessage)=>{
+  const opentok = new OpenTok('47402891', '80eea7a73596b3e1414a74eaa1224f017b13a2bf');
+  let sessionId;
+  opentok.createSession({}, function(error, session) {
+    if (error) {
+      console.log("Error creating session:", error)
+    } else {
+      sessionId = session.sessionId;
+      const token = opentok.generateToken(sessionId);
+      emitToMany('call',data.userIds,{sessionId, token, data});
+    }
+  });
+
+}
 
 io.on("connection", (socket) => {
   socket.emit("ping")
@@ -103,7 +119,7 @@ io.on("connection", (socket) => {
       if(message) socket.emit("resSendMessage",{success:false})
     }
     const participants =await participantController.getParticipantIds(data.roomId);
-    emitToMany(participants.length>0?participants:data?.userIds ,data)
+    emitToMany('getMessage',participants.length>0?participants:data?.userIds ,data)
   });
 
   //when disconnect
@@ -112,4 +128,23 @@ io.on("connection", (socket) => {
     removeUser(socket.id);
     io.emit("getUsers", users);
   });
+
+  // call
+  socket.on("call", async (data: ISendMessage)=>{
+    // tao mess
+    const message =createMessage({...data, content:"đã bắt đầu cuộc gọi."})
+    if(!message) socket.emit("resSendMessage",{success:false})
+
+    if(data?.userIds){
+      if(data.userIds?.length>0){
+        getOpentok(data);
+      }
+    }
+    else{
+      const participants =await participantController.getParticipantIds(data.roomId);
+      const dataTmp= {...data, userIds: participants}
+      getOpentok(dataTmp);
+    }
+  })
+
 });
