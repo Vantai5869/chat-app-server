@@ -25,7 +25,13 @@ class IUser {
     @prop({required: true})
     public username: string;
 
-    @prop({required: false, trim:true , unique: true, sparse:true,default:'', match: /^(([^<>()\[\]\\.,:\s@"]+(\.[^<>()\[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })
+    @prop({
+        required: false,
+        trim:true ,
+        unique: true,
+        sparse:true,
+        default:'',
+        match: /^(([^<>()\[\]\\.,:\s@"]+(\.[^<>()\[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })
     public email: string;  
     
     @prop({ required: false, unique: true, sparse:true,default:'', match:/^(84|0[3|5|7|8|9])+([0-9]{8})$/ })

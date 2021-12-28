@@ -11,11 +11,15 @@ class IFriend {
     @prop({ ref: 'users', required:true })
     public friendId: string;
 
+    @prop({default:false})
+    public accepted: Boolean;
+
     @prop({ required: true ,  default: Date.now })
     public createdAt:   Number;
 
     @prop({ required: true ,  default:  Date.now,  })
     public updatedAt: Number;
+    
 }
   
 const FriendModel = getModelForClass(IFriend);
