@@ -109,6 +109,17 @@ const SocketServer = (socket) => {
         getOpentok(dataTmp);
       }
     })
+
+    // get and send QRCODE 
+    socket.on('getQRCODE',()=>{
+        socket.emit('getQRCODE',{qrcode:socket.id})
+    })
+
+    // Scan QR 
+    socket.on('sCanQRCODE', data=>{
+        console.log(data)
+        io.to(data.clientId).emit('sCanQRCODE',{user:data.userData});
+    })
   
 } 
 
