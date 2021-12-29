@@ -165,12 +165,13 @@ const getInfoForRoom=async(roomId:string, userId:string)=>{
             }).lean()
         let avatar=[]
         let name=''
+        console.log(participants)
         if(participants.length==1){
             let a: any
             a= participants[0].userId
             name=a?.username
             avatar=[a?.avatar]
-        }else{
+        }else if(participants.length>1){
             let a:any,b: any
             a= participants[0].userId
             b= participants[1].userId
