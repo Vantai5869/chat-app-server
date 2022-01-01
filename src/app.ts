@@ -6,6 +6,7 @@ import roomRoutes from './routes/room';
 import participantRoutes from './routes/participant';
 import messageRoutes from './routes/message';
 import mediaUpload from './routes/mediaUpload';
+
 const fileUpload = require('express-fileupload');
 const NAMESPACE = 'APP';
 
@@ -47,7 +48,6 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use('/public',express.static('public'))
 
 app.get("/healthcheck", (req, res) => res.sendStatus(200));
-
 
 // router
 app.use('/api/v1/users', userRoutes);

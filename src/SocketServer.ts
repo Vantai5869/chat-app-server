@@ -2,7 +2,15 @@ import { createMessage } from './controllers/message';
 import participantController, { createMultipleParticipants } from './controllers/participant';
 import { checkRoom } from './controllers/room';
 import { ISendMessage } from './types/ISendMessage';
-import {io} from './main'
+import {io} from './main';
+
+// firebase
+var admin = require("firebase-admin");
+var serviceAccount = require("D:/NODEJS/TYPESCRIPT/chat-app-server/src/chatapp-307815-firebase-adminsdk-w4bvz-bedfef8acf.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
 var OpenTok = require('opentok');
 
 let users = [];
@@ -21,7 +29,7 @@ const getUser = (userId) => {
   return users.find((user) => user.userId === userId);
 };
 
-const emitToMany =(emitName,arrId,data)=> {
+const emitToMany =(emitName:string,arrId:string[],data)=> {
   for(let i = 0; i < arrId.length; i++){
     io.to(arrId[i]).emit(emitName,data);
   }
@@ -41,6 +49,35 @@ const getOpentok=(data: ISendMessage)=>{
     }
   });
 }
+
+
+const sendToUserDevice =(deviceId, message:ISendMessage)=> {
+    admin.messaging().send({
+        token: deviceId,
+        data: {
+            customData: "Deneme",
+            id: "1",
+            ad: "Yasin",
+            subTitle: "Nodejs Bildirimiii"
+        },
+        android: {
+            notification: {
+                body: message.content,
+                title: message.userId.username,
+                color: "#fff566",
+                priority: "high",
+                sound: "default",
+                vibrateTimingsMillis: [200, 500, 800],
+                imageUrl: message.userId.avatar
+            }
+        }
+    }).then((msg) => {
+        console.log(msg)
+    }).catch((err) => {
+        console.log(err)
+    })
+  return
+};
 
 
 const SocketServer = (socket) => {
@@ -83,6 +120,8 @@ const SocketServer = (socket) => {
       }
       const participants =await participantController.getParticipantIds(data.roomId);
       emitToMany('getMessage',participants.length>0?participants:data?.userIds ,data)
+      // sendToUserDevice('eN-kLZGUQ624Vu38DS91Vq:APA91bE00V6AoWbc4naMStWhuS4LxRqpYuh2gMrehZI1zbfcLlJBQdblkNbwGj1F3R0wsgKi-QqSwfXeKNHKVNbRb4GDI_V2dUOvU6M7dySCh2Znn3o5Y9cU1CiXn9nMFBZ87FCu-P9D',data)
+      sendToUserDevice('cP1ZBnQsQ7-7C-uongdRNS:APA91bFiFBSQzCzPt_awwmMn7kmga0aQGB0gb_dpFYCoqR0FTBkdg1axFJGItxuGzbB4NW_pVoV-eqBTi5WMkvh_J9EKdtgRuBKobOwAYBpZTXCQ8tYGYfQKLNHzZ_ceD-t6IlpF8MrY',data)
     });
   
     //when disconnect

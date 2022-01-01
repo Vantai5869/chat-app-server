@@ -17,12 +17,13 @@ const validateToken = (req: Request, res: Response) => {
 };
 
 const register =async (req: Request, res: Response) => {
-    if(!req.body.email && !req.body.phone || !req.body.username|| !req.body.password)return  res.status(400).json({
+    console.log(req.body)
+    if(!req.body.phone || !req.body.username|| !req.body.password)return  res.status(400).json({
         success: false,
-        message: 'email|phone|username|password field not found'
+        message: 'phone|username|password field not found'
     });
 
-    let { email, password,...rest } = req.body;
+    let { phone, password,...rest } = req.body;
     bcryptjs.hash(password, 10, (hashError, hash) => {
         if (hashError) {
             return res.status(401).json({
@@ -33,8 +34,8 @@ const register =async (req: Request, res: Response) => {
 
         const _user = new UserModel({
             _id: new mongoose.Types.ObjectId(),
-            email,
             ...rest,
+            phone,
             password: hash
         });
 
@@ -58,6 +59,7 @@ const register =async (req: Request, res: Response) => {
                 })
             })
             .catch((error) => {
+                console.log(error);
                 return res.status(500).json({
                     message: error.message,
                     error
@@ -72,7 +74,6 @@ const login =async (req: Request, res: Response) => {
         message: 'email|phone|password field not found'
     });
     let { email,phone, password } = req.body;
-    console.log(req.body);
     try {
         let users
         if(email) {

@@ -17,7 +17,7 @@ export enum Language {
 }
 
 @modelOptions({ options: { customName: 'users' } })
-@index({ email: 1, phone:1 }, { unique: true , sparse:true})
+@index({phone:1 }, { unique: true , sparse:true})
 class IUser {
     @prop()
     public _id:string
@@ -28,9 +28,7 @@ class IUser {
     @prop({
         required: false,
         trim:true ,
-        unique: true,
         sparse:true,
-        default:'',
         match: /^(([^<>()\[\]\\.,:\s@"]+(\.[^<>()\[\]\\.,:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })
     public email: string;  
     
@@ -81,6 +79,9 @@ class IUser {
 
     @prop({ default:  Date.now,  })
     public dataOfBirth: Number;
+    
+    @prop()
+    public deviceToken: string;
 }
   
 const UserModel = getModelForClass(IUser);

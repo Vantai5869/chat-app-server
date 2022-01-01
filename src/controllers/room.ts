@@ -141,13 +141,11 @@ const checkExist = async(req: Request, res: Response, next: NextFunction) => {
     if(req.body?.roomId) {
         const checkRoom = await RoomModel.findOne({_id: req.body.roomId});
         if(checkRoom?._id) {
-            console.log(checkRoom)
             req.body.isHaveRoom = true;
             next()
             return 
         }
         const roomId = req.body.roomId
-        console.log(roomId)
         const IdArr = req.body.userIds
         const _room = new RoomModel({
             _id: roomId.toString(),
@@ -158,7 +156,6 @@ const checkExist = async(req: Request, res: Response, next: NextFunction) => {
         });
         try {
             const res = await _room.save()
-            console.log(res)
         } catch (error) {
             console.log(error)
             res.status(500)
