@@ -6,7 +6,7 @@ import {io} from './main';
 
 // firebase
 var admin = require("firebase-admin");
-var serviceAccount = require("D:/NODEJS/TYPESCRIPT/chat-app-server/src/chatapp-307815-firebase-adminsdk-w4bvz-bedfef8acf.json");
+var serviceAccount = require("./chatapp-307815-firebase-adminsdk-w4bvz-bedfef8acf.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
