@@ -17,7 +17,6 @@ const validateToken = (req: Request, res: Response) => {
 };
 
 const register =async (req: Request, res: Response) => {
-    console.log(req.body)
     if(!req.body.phone || !req.body.username|| !req.body.password)return  res.status(400).json({
         success: false,
         message: 'phone|username|password field not found'
@@ -198,27 +197,69 @@ const getUser = async(req: Request, res: Response) => {
 
 };
 const updateUser = async(req: Request, res: Response) => {
-    try {
-        const user= await UserModel.findByIdAndUpdate({_id: req.params.id},req.body)
-        if(user){
-            return res.status(200).json({
-                success: true,
-                message: `Updated ${user.email} !`,
-                data:user
+    if(req.body.password) {
+        if(!req.body.newPassword){
+            return res.status(401).json({
+              success:false,
+              error:'update password not successful!'
             });
-
         }
-        return res.status(200).json({
-            message: `Cannot find!`,
-        });
-      
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-            error
-        });
+        const user= await UserModel.findOne({_id:req.params.id})
+        bcryptjs.compare(req.body.password, user.password, (error, result) => {
+            if (error) {
+                return res.status(401).json({
+                    success: false,
+                    message: 'Password Mismatch'
+                });
+            } else if(result) {
+                bcryptjs.hash(req.body.newPassword, 10, (hashError, hash) => {
+                    if(!hashError) {
+                        user.password=hash;
+                        user.save()
+                        return res.status(200).json({
+                            success: true,
+                            message: 'Cập nhật mật khẩu thành công!'
+                        })
+                    }
+                    else{
+                        return res.status(401).json({
+                            message: hashError.message,
+                            error: hashError
+                        });
+                    }
+                })
+            }else{
+                return res.status(200).json({
+                    success: false,
+                    message: 'Mật khẩu không đúng!'
+                })
+            }
+        })
+        
+    }else{
+        try {
+            const user= await UserModel.findByIdAndUpdate({_id: req.params.id},req.body)
+            if(user){
+                return res.status(200).json({
+                    success: true,
+                    message: `Updated  !`,
+                    data:user
+                });
+    
+            }
+            return res.status(200).json({
+                message: `Cannot find!`,
+            });
+          
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+                error
+            });
+        }
     }
+   
 
 };
 const deleteUser = async(req: Request, res: Response) => {
