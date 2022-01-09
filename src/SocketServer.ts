@@ -3,7 +3,7 @@ import participantController, { createMultipleParticipants } from './controllers
 import { checkRoom } from './controllers/room';
 import { ISendMessage } from './types/ISendMessage';
 import {io} from './main';
-
+import userController from './controllers/user';
 // firebase
 var admin = require("firebase-admin");
 var serviceAccount = require("./chatapp-307815-firebase-adminsdk-w4bvz-bedfef8acf.json");
@@ -160,6 +160,16 @@ const SocketServer = (socket) => {
         io.to(data.clientId).emit('sCanQRCODE',{user:data.userData});
     })
   
+    // verify
+    socket.on('Verify',async data=>{
+      const res= await userController.verify(data.idUser)
+      socket.emit('verify',{success:res})
+    })
+
+    // endCall
+    socket.on('EndCall', data=>{
+      socket.emit('EndCall')
+    })
 } 
 
 export default SocketServer

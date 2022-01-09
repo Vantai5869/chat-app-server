@@ -328,11 +328,35 @@ const getByPage = async(req: Request, res: Response) => {
             message: 'get user not successful',
             error:error
         })
-           
+    }
+
+};
+
+const verify = async(userId: string): Promise<boolean> => {
+    try {
+        const userUpdate= await UserModel.findByIdAndUpdate(userId,{verified:true})
+        if(userUpdate)
+        return true
+        else{
+            return false
+        }
+        
+    } catch (error) {
+        return false
     }
 
 };
 
 
-
-export default { validateToken, register, login, getAllUsers, deleteAll,getUser, updateUser, deleteUser,getByPage };
+export default { 
+    validateToken, 
+    register, 
+    login, 
+    getAllUsers,
+    deleteAll,
+    getUser, 
+    updateUser, 
+    deleteUser,
+    getByPage,
+    verify
+};
