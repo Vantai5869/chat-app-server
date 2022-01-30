@@ -165,7 +165,6 @@ const getInfoForRoom=async(roomId:string, userId:string)=>{
             }).lean()
         let avatar=[]
         let name=''
-        console.log(participants)
         if(participants.length==1){
             let a: any
             a= participants[0].userId
@@ -213,7 +212,6 @@ const getInfoUserOfRoom=async(roomId:string, userId:string)=>{
 const getParticipantIds=async(roomId:string)=>{
     try {
         const participants = await ParticipantModel.find({roomId:roomId}).distinct('userId')
-        console.log(participants)
         return participants
     } catch (error) {
         console.log(error);
@@ -224,7 +222,6 @@ const getParticipantIds=async(roomId:string)=>{
 
 const createMultiple=async(req: Request, res: Response, next: NextFunction)=>{
     if(req.body?.isHaveRoom==true){
-        console.log(req.body.isHaveRoom)
         next()
         return
     }
@@ -232,7 +229,6 @@ const createMultiple=async(req: Request, res: Response, next: NextFunction)=>{
     let arr=[]
     if(req.body?.userIds){
         const userIds= req.body.userIds
-        console.log(userIds)
         for(let i = 0; i <userIds.length; i++){
             arr.push({
                 userId:userIds[i],

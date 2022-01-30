@@ -178,7 +178,7 @@ const deleteAll = async(req: Request, res: Response) => {
 };
 const getUser = async(req: Request, res: Response) => {
     try {
-        const user= await UserModel.findById(req.params.id)
+        const user= await UserModel.findById(req.params.id).select('-password')
         if(user)
         return res.status(200).json(
             {

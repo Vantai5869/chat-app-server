@@ -45,6 +45,8 @@ const getOpentok=(data: ISendMessage)=>{
     } else {
       sessionId = session.sessionId;
       const token = opentok.generateToken(sessionId);
+      console.log('sessionId',sessionId)
+      console.log('token',token)
       emitToMany('call',data.userIds,{sessionId, token, data});
     }
   });
@@ -156,7 +158,6 @@ const SocketServer = (socket) => {
 
     // Scan QR 
     socket.on('sCanQRCODE', data=>{
-        console.log(data)
         io.to(data.clientId).emit('sCanQRCODE',{user:data.userData});
     })
   
