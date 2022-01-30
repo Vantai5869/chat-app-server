@@ -334,7 +334,7 @@ const getByPage = async(req: Request, res: Response) => {
 
 const verify = async(userId: string): Promise<boolean> => {
     try {
-        const userUpdate= await UserModel.findByIdAndUpdate(userId,{verified:true})
+        const userUpdate= await UserModel.findByIdAndUpdate(userId,{verify:true})
         if(userUpdate)
         return true
         else{
