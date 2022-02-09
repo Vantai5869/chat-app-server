@@ -1,24 +1,24 @@
 
 import express from 'express'
-import FriendController from '../controllers/FriendController'
+import friendController from '../controllers/friendController'
 const router = express.Router()
 
 
 
 // add friend
-router.post('/',  FriendController.add)
+router.post('/',  friendController.add)
 
 // get all friend id
-router.get('/:user_id',  FriendController.getAll)
+router.get('/:user_id',  friendController.getAll)
 
 // Xóa friend
-router.delete('/:id',  FriendController.deleteFriend)
+router.delete('/:id',  friendController.deleteFriend)
 
 // Cập nhật friend
-router.put('/', FriendController.editFriend)
+router.put('/', friendController.editFriend)
 
 // Cập nhật friend
-router.delete('/cancel/:user_id/:friend_id', FriendController.cancelFriend)
+router.delete('/cancel/:user_id/:friend_id', friendController.cancelFriend)
 
 
 

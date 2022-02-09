@@ -348,6 +348,37 @@ const verify = async(userId: string): Promise<boolean> => {
 };
 
 
+// friend
+
+const getFriend = async (req, res) => {
+    UserModel.find().select("-password").where('_id').in(req.friends).exec((err, records) => {
+        res.json({ friends: records })
+    })
+}
+
+const checkFriend = async (req, res) => {
+    let check = req.friends.includes(req.params.check_user_id);
+    if (check) {
+        res.json(true)
+    }
+    else {
+        res.json(false)
+    }
+}
+
+const getFriendRequests = async (req, res) => {
+    // console.log(req.friendRequests)
+    UserModel.find().select("-password").where('_id').in(req.friendRequests).exec((err, records) => {
+        res.json({ friends: records });
+    });
+}
+
+
+const getRecommend = async (req, res) => {
+    UserModel.find().sort({ _id: -1 }).select("-password").where('_id').nin(req.friends).limit(10).exec((err, records) => {
+        res.json({ users: records });
+    })
+}
 export default { 
     validateToken, 
     register, 
@@ -358,5 +389,10 @@ export default {
     updateUser, 
     deleteUser,
     getByPage,
-    verify
+    verify,
+    getFriend,
+    checkFriend,
+    getFriendRequests,
+    getRecommend
+
 };
