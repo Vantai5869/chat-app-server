@@ -5,6 +5,7 @@ import userRoutes from './routes/user';
 import roomRoutes from './routes/room';
 import participantRoutes from './routes/participant';
 import messageRoutes from './routes/message';
+import friendRoutes from './routes/friend';
 import mediaUpload from './routes/mediaUpload';
 
 const fileUpload = require('express-fileupload');
@@ -55,6 +56,7 @@ app.use('/api/v1/rooms', roomRoutes);
 app.use('/api/v1/participants', participantRoutes);
 app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/media', mediaUpload);
+app.use('/api/v1/friends', friendRoutes);
 
 
 // swagger
