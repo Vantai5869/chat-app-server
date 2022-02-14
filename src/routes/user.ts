@@ -6,19 +6,6 @@ import extractJWT from '../middleware/extractJWT';
 import meCheck from './../middleware/meCheck';
 
 const router = express.Router();
-// friend
-
-// get getRecommend
-router.get('/recommend/:user_id',  friendController.getAll, userController.getRecommend)
-
-// get friends
-router.get('/friend/:user_id',  friendController.getAllFriend, userController.getFriend)
-
-// check Frieng
-router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, userController.checkFriend)
-
-// get friend request
-router.get('/friend-request/:user_id', friendController.getAllRequest, userController.getFriendRequests)
 
 router.get('/auth/validate',extractJWT, userController.validateToken);
 router.get('/:page/:limit', userController.getByPage);
@@ -30,6 +17,19 @@ router.delete('/:id',adminCheck, userController.deleteUser);
 router.delete('/',adminCheck, userController.deleteAll);
 router.post('/login', userController.login);
 
+// friend
 
+
+// // get getRecommend
+// router.get('/recommend/:user_id',  friendController.getAll, userController.getRecommend)
+
+// // get friends
+// router.get('/friend/:user_id',  friendController.getAllFriend, userController.getFriend)
+
+// // check Frieng
+// router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, userController.checkFriend)
+
+// // get friend request
+// router.get('/friend-request/:user_id', friendController.getAllRequest, userController.getFriendRequests)
 
 export = router;
