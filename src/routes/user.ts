@@ -6,19 +6,7 @@ import extractJWT from '../middleware/extractJWT';
 import meCheck from './../middleware/meCheck';
 
 const router = express.Router();
-
-router.get('/auth/validate',extractJWT, userController.validateToken);
-router.get('/:page/:limit', userController.getByPage);
-router.get('/', userController.getAllUsers);
-router.post('/', userController.register);
-router.get('/:id', userController.getUser);
-router.put('/:id',meCheck, userController.updateUser);
-router.delete('/:id',adminCheck, userController.deleteUser);
-router.delete('/',adminCheck, userController.deleteAll);
-router.post('/login', userController.login);
-
 // friend
-
 
 // get getRecommend
 router.get('/recommend/:user_id',  friendController.getAll, userController.getRecommend)
@@ -31,5 +19,17 @@ router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, us
 
 // get friend request
 router.get('/friend-request/:user_id', friendController.getAllRequest, userController.getFriendRequests)
+
+router.get('/auth/validate',extractJWT, userController.validateToken);
+router.get('/:page/:limit', userController.getByPage);
+router.get('/', userController.getAllUsers);
+router.post('/', userController.register);
+router.get('/:id', userController.getUser);
+router.put('/:id',meCheck, userController.updateUser);
+router.delete('/:id',adminCheck, userController.deleteUser);
+router.delete('/',adminCheck, userController.deleteAll);
+router.post('/login', userController.login);
+
+
 
 export = router;
