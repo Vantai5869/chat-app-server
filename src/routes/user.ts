@@ -20,16 +20,16 @@ router.post('/login', userController.login);
 // friend
 
 
-// // get getRecommend
-// router.get('/recommend/:user_id',  friendController.getAll, userController.getRecommend)
+// get getRecommend
+router.get('/recommend/:user_id',  friendController.getAll, userController.getRecommend)
 
-// // get friends
-// router.get('/friend/:user_id',  friendController.getAllFriend, userController.getFriend)
+// get friends
+router.get('/friend/:user_id',  friendController.getAllFriend, userController.getFriend)
 
-// // check Frieng
-// router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, userController.checkFriend)
+// check Frieng
+router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, userController.checkFriend)
 
-// // get friend request
-// router.get('/friend-request/:user_id', friendController.getAllRequest, userController.getFriendRequests)
+// get friend request
+router.get('/friend-request/:user_id', friendController.getAllRequest, userController.getFriendRequests)
 
 export = router;

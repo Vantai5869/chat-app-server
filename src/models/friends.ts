@@ -1,6 +1,6 @@
 import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
 
-@modelOptions({ options: { customName: 'participants' } })
+@modelOptions({ options: { customName: 'friends' } })
 class IFriend {
     @prop()
     public _id: string;

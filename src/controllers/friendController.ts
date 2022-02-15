@@ -16,7 +16,6 @@ const getAllFriend = async (req, res, next) => {
 
 }
 
-
 const getAllRequest = async (req, res, next) => {
     await FriendModel.find({ user_id: req.params.user_id }, (err, friendRequests) => {
         req.friendRequests = friendRequests  
