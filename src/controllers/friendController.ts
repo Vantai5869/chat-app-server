@@ -1,32 +1,37 @@
 import { FriendModel } from "../models/friends"
 
 const getAll = async (req, res, next) => {
-    await FriendModel.find({ user_id: req.params.user_id }, (err, friends) => {
+     FriendModel.find({ userId: req.params.user_id }, (err, friends) => {
         req.friends = friends
         next()
-    }).distinct('friend_id')
+    }).distinct('friendId')
 
 }
 
 const getAllFriend = async (req, res, next) => {
-    await FriendModel.find({ user_id: req.params.user_id }, (err, friends) => {
+    try {
+     FriendModel.find({ userId: req.params.user_id }, (err, friends) => {
         req.friends = friends
         next()
-    }).where('accepted').equals(true).distinct('friend_id')
+    }).where('accepted').equals(true).distinct('friendId')
+    } catch (error) {
+        console.log(error)
+    }
+   
 
 }
 
 const getAllRequest = async (req, res, next) => {
-    await FriendModel.find({ user_id: req.params.user_id }, (err, friendRequests) => {
+     FriendModel.find({ userId: req.params.user_id }, (err, friendRequests) => {
         req.friendRequests = friendRequests  
         next()
-    }).where('accepted').equals(false).distinct('friend_id')
+    }).where('accepted').equals(false).distinct('friendId')
 
 }
 
 
 const deleteFriend = async (req, res) => {
-    await FriendModel.findOneAndDelete({ _id: req.params.id }, function (err) {
+     FriendModel.findOneAndDelete({ _id: req.params.id }, function (err) {
         if (err) {
             res.json({ success: false });
         } else {
@@ -36,7 +41,7 @@ const deleteFriend = async (req, res) => {
 }
 
 const add = async (req, res) => {
-    FriendModel.findOne({ friend_id: req.body.friend_id, user_id: req.body.user_id }, (err, user) => {
+    FriendModel.findOne({ friendId: req.body.friend_id, user_id: req.body.user_id }, (err, user) => {
         if (user) {
             return res.json({ success: false })
         }
@@ -53,7 +58,7 @@ const add = async (req, res) => {
 
 const editFriend = async (req, res) => {
     let options = { upsert: true, new: false, setDefaultsOnInsert: false };
-    await FriendModel.findOneAndUpdate({ friend_id: req.body.friend_id, user_id: req.body.user_id },
+     FriendModel.findOneAndUpdate({ friendId: req.body.friend_id, user_id: req.body.user_id },
         { $set: { accepted: true } }, options, (err, doc) => {
             if (err) {
                 console.log("Something wrong when updating data!");
@@ -66,7 +71,7 @@ const editFriend = async (req, res) => {
 
 const cancelFriend = async (req, res) => {
 
-    FriendModel.findOneAndDelete({ friend_id: req.params.friend_id, user_id: req.params.user_id },
+    FriendModel.findOneAndDelete({ friendId: req.params.friend_id, user_id: req.params.user_id },
         (err, doc) => {
             if (err) {
                 console.log("Something wrong when delete friend!");
