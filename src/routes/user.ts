@@ -26,7 +26,7 @@ router.get('/recommend/:user_id',  friendController.getAll, userController.getRe
 // get friends
 router.get('/friend/:user_id',  friendController.getAllFriend, userController.getFriend)
 
-// check Frieng
+// check Friend
 router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, userController.checkFriend)
 
 // get friend request
