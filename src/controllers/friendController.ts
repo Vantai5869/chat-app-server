@@ -50,7 +50,9 @@ const deleteFriend = async (req, res) => {
 }
 
 const add = async (req, res) => {
-    FriendModel.findOne({ friendId: req.body.friend_id, user_id: req.body.user_id }, (err, user) => {
+    console.log('req.body')
+    console.log(req.body)
+    FriendModel.findOne({ friendId: req.body.friend_id, userId: req.body.user_id }, (err, user) => {
         if (user) {
             return res.json({ success: false })
         }
@@ -67,7 +69,7 @@ const add = async (req, res) => {
 
 const editFriend = async (req, res) => {
     let options = { upsert: true, new: false, setDefaultsOnInsert: false };
-     FriendModel.findOneAndUpdate({ friendId: req.body.friend_id, user_id: req.body.user_id },
+     FriendModel.findOneAndUpdate({ friendId: req.body.friend_id, userId: req.body.user_id },
         { $set: { accepted: true } }, options, (err, doc) => {
             if (err) {
                 console.log("Something wrong when updating data!");
@@ -80,7 +82,7 @@ const editFriend = async (req, res) => {
 
 const cancelFriend = async (req, res) => {
 
-    FriendModel.findOneAndDelete({ friendId: req.params.friend_id, user_id: req.params.user_id },
+    FriendModel.findOneAndDelete({ friendId: req.params.friend_id, userId: req.params.user_id },
         (err, doc) => {
             if (err) {
                 console.log("Something wrong when delete friend!");
