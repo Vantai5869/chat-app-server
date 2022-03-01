@@ -1,4 +1,5 @@
-import { FriendModel } from "../models/friends"
+import mongoose from 'mongoose';
+import { FriendModel } from "../models/friends";
 
 const getAll = async (req, res, next) => {
      FriendModel.find({ userId: req.params.user_id }, (err, friends) => {
@@ -53,16 +54,38 @@ const add = async (req, res) => {
     console.log('req.body')
     console.log(req.body)
     const data={ friendId: req.body.friend_id, userId: req.body.user_id };
-    FriendModel.findOne(data, (err, user) => {
+    FriendModel.findOne(data,async (err, user) => {
+        if (err) { return res.json({ success: false, message:err }) }
         if (user) {
             return res.json({ success: false })
         }
         else {
-            const friend = new FriendModel(data)
-            friend.save((err, result) => {
-                if (err) { return res.json({ success: false, message:err }) }
-                res.json({ success: true, data: result })
+            const _friend = new FriendModel({
+                _id:new mongoose.Types.ObjectId(),
+                ...data
             })
+
+            try {
+                const friend= await  _friend.save()
+                if(friend){
+                    return res.status(201).json({
+                        success:true,
+                        message: 'Create success',
+                        data: friend,
+                    })
+                }
+                return res.status(404).json({
+                    success:false,
+                    message: 'create not successful',
+                })
+             
+            } catch (error) {
+                return res.status(500).json({
+                    success:false,
+                    message: error.message,
+                })
+            }
+
         }
     })
 
