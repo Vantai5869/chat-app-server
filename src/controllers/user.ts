@@ -374,6 +374,14 @@ const getFriendRequests = async (req, res) => {
 }
 
 
+const getMyRequests = async (req, res) => {
+    // console.log(req.friendRequests)
+    UserModel.find().select("-password").where('_id').in(req.myRequests).exec((err, records) => {
+        res.json({ friends: records });
+    });
+}
+
+
 const getRecommend = async (req, res) => {
     UserModel.find().sort({ _id: -1 }).select("-password").where('_id').nin(req.friends).limit(10).exec((err, records) => {
         res.json({ users: records });
@@ -393,6 +401,7 @@ export default {
     getFriend,
     checkFriend,
     getFriendRequests,
+    getMyRequests,
     getRecommend
 
 };

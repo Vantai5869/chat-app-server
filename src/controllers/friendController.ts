@@ -30,6 +30,15 @@ const getAllRequest = async (req, res, next) => {
 }
 
 
+const getMyRequest = async (req, res, next) => {
+     FriendModel.find({ friendId: req.params.user_id }, (err, myRequests) => {
+        req.myRequests = myRequests  
+        next()
+    }).where('accepted').equals(false).distinct('userId')
+
+}
+
+
 const deleteFriend = async (req, res) => {
      FriendModel.findOneAndDelete({ _id: req.params.id }, function (err) {
         if (err) {
@@ -81,6 +90,7 @@ const cancelFriend = async (req, res) => {
             })
         });
 }
+
 export default {
     add,
     deleteFriend,
@@ -88,5 +98,6 @@ export default {
     getAllFriend,
     getAllRequest,
     editFriend,
-    cancelFriend
+    cancelFriend,
+    getMyRequest
 }

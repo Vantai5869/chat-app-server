@@ -20,6 +20,9 @@ router.get('/friend/:user_id/:check_user_id',  friendController.getAllFriend, us
 // get friend request
 router.get('/friend-request/:user_id', friendController.getAllRequest, userController.getFriendRequests)
 
+// get my request
+router.get('/myrequest/:user_id', friendController.getMyRequest, userController.getMyRequests)
+
 router.get('/auth/validate',extractJWT, userController.validateToken);
 router.get('/:page/:limit', userController.getByPage);
 router.get('/', userController.getAllUsers);
