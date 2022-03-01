@@ -52,12 +52,13 @@ const deleteFriend = async (req, res) => {
 const add = async (req, res) => {
     console.log('req.body')
     console.log(req.body)
-    FriendModel.findOne({ friendId: req.body.friend_id, userId: req.body.user_id }, (err, user) => {
+    const data={ friendId: req.body.friend_id, userId: req.body.user_id };
+    FriendModel.findOne(data, (err, user) => {
         if (user) {
             return res.json({ success: false })
         }
         else {
-            const friend = new FriendModel(req.body)
+            const friend = new FriendModel(data)
             friend.save((err, result) => {
                 if (err) { return res.json({ success: false, message:err }) }
                 res.json({ success: true, data: result })
