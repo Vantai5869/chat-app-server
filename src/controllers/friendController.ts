@@ -57,7 +57,7 @@ const add = async (req, res) => {
         else {
             const friend = new FriendModel(req.body)
             friend.save((err, result) => {
-                if (err) { return res.json({ success: true }) }
+                if (err) { return res.json({ success: false, message:err }) }
                 res.json({ success: true, data: result })
             })
         }
