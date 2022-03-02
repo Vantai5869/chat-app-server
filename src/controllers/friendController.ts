@@ -23,8 +23,9 @@ const getAllFriend = async (req, res, next) => {
 }
 
 const  getMyRequest = async (req, res, next) => {
+    console.log(req.params.user_id)
      FriendModel.find({ userId: req.params.user_id }, (err, friendRequests) => {
-        req.friendRequests = friendRequests  
+        req.myRequests = friendRequests  
         next()
     }).where('accepted').equals(false).distinct('friendId')
 
@@ -33,7 +34,7 @@ const  getMyRequest = async (req, res, next) => {
 
 const getAllRequest = async (req, res, next) => {
      FriendModel.find({ friendId: req.params.user_id }, (err, myRequests) => {
-        req.myRequests = myRequests  
+        req.friendRequests = myRequests  
         next()
     }).where('accepted').equals(false).distinct('userId')
 
