@@ -22,7 +22,7 @@ const getAllFriend = async (req, res, next) => {
 
 }
 
-const getAllRequest = async (req, res, next) => {
+const  getMyRequest = async (req, res, next) => {
      FriendModel.find({ userId: req.params.user_id }, (err, friendRequests) => {
         req.friendRequests = friendRequests  
         next()
@@ -31,7 +31,7 @@ const getAllRequest = async (req, res, next) => {
 }
 
 
-const getMyRequest = async (req, res, next) => {
+const getAllRequest = async (req, res, next) => {
      FriendModel.find({ friendId: req.params.user_id }, (err, myRequests) => {
         req.myRequests = myRequests  
         next()
