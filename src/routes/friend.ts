@@ -4,6 +4,8 @@ import friendController from '../controllers/friendController'
 const router = express.Router()
 
 
+// Cập nhật friend
+router.post('/cancel/:user_id/:friend_id', friendController.cancelFriend)
 
 // add friend
 router.post('/',  friendController.add)
@@ -17,8 +19,7 @@ router.delete('/:id',  friendController.deleteFriend)
 // Cập nhật friend
 router.put('/', friendController.editFriend)
 
-// Cập nhật friend
-router.delete('/cancel/:user_id/:friend_id', friendController.cancelFriend)
+
 
 
 

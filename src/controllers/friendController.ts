@@ -28,7 +28,6 @@ const  getMyRequest = async (req, res, next) => {
         req.myRequests = friendRequests  
         next()
     }).where('accepted').equals(false).distinct('friendId')
-
 }
 
 
@@ -111,6 +110,9 @@ const cancelFriend = async (req, res) => {
         (err, doc) => {
             if (err) {
                 console.log("Something wrong when delete friend!");
+                res.json({
+                    success: false
+                })
             }
             res.json({
                 success: true
