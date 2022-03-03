@@ -125,19 +125,35 @@ const editFriend = async (req, res) => {
 }
 
 const cancelFriend = async (req, res) => {
-
+    let kq;
     FriendModel.findOneAndDelete({ friendId: req.params.friend_id, userId: req.params.user_id },
         (err, doc) => {
             if (err) {
-                console.log("Something wrong when delete friend!");
-                res.json({
-                    success: false
-                })
+                console.log("Something wrong when updating data!");
+                kq= false
+            }else{
+                kq=true;
             }
+        });
+    FriendModel.findOneAndDelete({ userId: req.params.friend_id, friendId: req.params.user_id },
+        (err, doc) => {
+            if (err) {
+                console.log("Something wrong when updating data!");
+                kq= false
+            }else{
+                kq=true;
+            }
+        });
+
+        if(kq){
             res.json({
                 success: true
             })
-        });
+        }else{
+            res.json({
+                success: false
+            })
+        }
 }
 
 export default {
