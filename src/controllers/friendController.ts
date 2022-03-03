@@ -93,24 +93,35 @@ const add = async (req, res) => {
 
 const editFriend = async (req, res) => {
     let options = { upsert: true, new: false, setDefaultsOnInsert: false };
+    let kq
      FriendModel.findOneAndUpdate({ friendId: req.body.friend_id, userId: req.body.user_id },
         { $set: { accepted: true } }, options, (err, doc) => {
             if (err) {
                 console.log("Something wrong when updating data!");
+                kq= false
+            }else{
+                kq=true;
             }
-            res.json({ friend: doc })
-            // console.log(doc)
 
         });
      FriendModel.findOneAndUpdate({ userId: req.body.friend_id, friendId: req.body.user_id },
         { $set: { accepted: true } }, options, (err, doc) => {
             if (err) {
                 console.log("Something wrong when updating data!");
+                kq= false
+            }else{
+                kq=true;
             }
-            res.json({ friend: doc })
-            // console.log(doc)
-
         });
+    if(kq){
+        res.json({
+            success: true
+        })
+    }else{
+        res.json({
+            success: false
+        })
+    }
 }
 
 const cancelFriend = async (req, res) => {
