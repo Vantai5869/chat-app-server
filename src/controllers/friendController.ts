@@ -102,6 +102,15 @@ const editFriend = async (req, res) => {
             // console.log(doc)
 
         });
+     FriendModel.findOneAndUpdate({ userId: req.body.friend_id, friendId: req.body.user_id },
+        { $set: { accepted: true } }, options, (err, doc) => {
+            if (err) {
+                console.log("Something wrong when updating data!");
+            }
+            res.json({ friend: doc })
+            // console.log(doc)
+
+        });
 }
 
 const cancelFriend = async (req, res) => {
