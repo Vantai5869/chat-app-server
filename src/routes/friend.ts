@@ -10,6 +10,9 @@ router.delete('/cancel/:user_id/:friend_id', friendController.cancelFriend)
 // Cập nhật friend
 router.put('/accept', friendController.editFriend)
 
+router.delete('delete/:id',  friendController.deleteFriend)
+
+
 // add friend
 router.post('/',  friendController.add)
 
@@ -17,7 +20,6 @@ router.post('/',  friendController.add)
 router.get('/:user_id',  friendController.getAll)
 
 // Xóa friend
-router.delete('/:id',  friendController.deleteFriend)
 
 
 
