@@ -24,6 +24,10 @@ const meCheck = (req: Request, res: Response, next: NextFunction) => {
                 if(decoded._id===req.params.id)
                 next();
                 else{ 
+                    console.log('decoded._id')
+                    console.log(decoded._id)
+                    console.log('req.params.id')
+                    console.log(req.params.id)
                     return res.status(401).json({
                         message: 'Unauthorized'
                     });
