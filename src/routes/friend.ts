@@ -5,7 +5,7 @@ const router = express.Router()
 
 
 // Cập nhật friend
-router.delete('/cancel/:user_id/:friend_id', friendController.cancelFriend)
+router.get('/cancel/:user_id/:friend_id', friendController.cancelFriend)
 
 // Cập nhật friend
 router.put('/accept', friendController.editFriend)
