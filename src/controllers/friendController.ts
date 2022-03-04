@@ -130,13 +130,13 @@ const editFriend = async (req, res) => {
 
 const cancelFriend = async (req, res) => {
     let kq=false;
-    FriendModel.findOneAndDelete({ friendId: req.params.friend_id, userId: req.params.user_id },
+    await FriendModel.findOneAndDelete({ friendId: req.params.friend_id, userId: req.params.user_id },
         (err, doc) => {
             if (!err) {
                 kq= true
             }
         });
-    FriendModel.findOneAndDelete({ userId: req.params.friend_id, friendId: req.params.user_id },
+    await FriendModel.findOneAndDelete({ userId: req.params.friend_id, friendId: req.params.user_id },
         (err, doc) => {
             if (!err) {
                 kq= true
