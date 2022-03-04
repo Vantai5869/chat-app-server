@@ -20,6 +20,9 @@ const meCheck = (req: Request, res: Response, next: NextFunction) => {
                     error
                 });
             } else {
+                if(decoded.role=='admin'){
+                    next();
+                }
                 res.locals.jwt = decoded;
                 if(decoded._id===req.params.id)
                 next();
