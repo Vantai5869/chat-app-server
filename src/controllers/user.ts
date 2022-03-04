@@ -90,6 +90,12 @@ const login =async (req: Request, res: Response) => {
                     message: 'Unauthorized'
                 });
             }
+            if(users[0].isBlock==true){
+                return res.status(401).json({
+                    success: false,
+                    message: 'Blocked'
+                });
+            }
 
             bcryptjs.compare(password, users[0].password, (error, result) => {
                 if (error) {
