@@ -22,9 +22,10 @@ const meCheck = (req: Request, res: Response, next: NextFunction) => {
             } else {
                 if(decoded.role=='admin'){
                     next();
+                    return 
                 }
                 res.locals.jwt = decoded;
-                if(decoded._id===req.params.id)
+                if(decoded.id===req.params.id)
                 next();
                 else{ 
                     console.log('decoded._id')
