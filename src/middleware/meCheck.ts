@@ -25,7 +25,7 @@ const meCheck = (req: Request, res: Response, next: NextFunction) => {
                 next();
                 else{ 
                     console.log('decoded._id')
-                    console.log(decoded._id)
+                    console.log(decoded)
                     console.log('req.params.id')
                     console.log(req.params.id)
                     return res.status(401).json({
