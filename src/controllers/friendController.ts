@@ -2,9 +2,13 @@ import mongoose from 'mongoose';
 import { FriendModel } from "../models/friends";
 
 const getAll = async (req, res, next) => {
-     FriendModel.find({  $or:[ { userId: req.params.user_id }, { friendId: req.params.user_id } ]}, (err, friends) => {
-        req.friends = friends
-        next()
+    let friends
+     FriendModel.find({ userId: req.params.user_id }, (err, kq1) => {
+        friends = kq1
+        FriendModel.find({ friendId: req.params.user_id }, (err, kq2) => {
+            req.friends = friends.push(kq2)
+            next()
+        }).distinct('userId')
     }).distinct('friendId')
 
 }
